@@ -65,43 +65,42 @@
     </div>
 
     <!-- CÓDIGO DE CONEXIÓN JAVASCRIPT REVISADO -->
+   <!-- CÓDIGO DE CONEXIÓN INTERNA (TRUCO TEMPORAL) -->
     <script>
-        // Al cargar la página, leemos el JSON real de Vicente
+        // Metemos tus datos directamente aquí para saltarnos el bloqueo del navegador
+        const datosSegurosVicente = {
+            "hucha": 0,
+            "mensajesComunidad": [
+                {
+                    "autor": "Vicente",
+                    "texto": "Quiero ser el primero en mandar mi mensaje al mundo, para que todo aquel que quiera escribir. Y conectar a traves de una red descentralizada.",
+                    "fecha": "1/30/2026, 10:56:12 PM"
+                }
+            ]
+        };
+
+        // Al cargar la página, se dibuja todo automáticamente sin buscar archivos externos
         window.onload = function() {
-            fetch('Mis_Semillas_Vicente.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('No se pudo encontrar el archivo JSON');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // 1. Actualizar la hucha con el valor del JSON
-                    document.getElementById('valor-hucha').innerText = data.hucha + " €";
+            // 1. Actualizar la hucha
+            document.getElementById('valor-hucha').innerText = datosSegurosVicente.hucha + " €";
 
-                    // 2. Limpiar el contenedor de mensajes
-                    const contenedor = document.getElementById('contenedor-mensajes');
-                    contenedor.innerHTML = "";
+            // 2. Limpiar el contenedor de mensajes
+            const contenedor = document.getElementById('contenedor-mensajes');
+            contenedor.innerHTML = "";
 
-                    // 3. Recorrer la lista de mensajes y dibujarlos en la pantalla
-                    data.mensajesComunidad.forEach(msg => {
-                        const tarjeta = document.createElement('div');
-                        tarjeta.className = 'tarjeta-mensaje';
-                        
-                        tarjeta.innerHTML = `
-                            <div class="autor">✍️ ${msg.autor}</div>
-                            <div class="texto-msg">"${msg.texto}"</div>
-                            <div class="fecha">${msg.fecha}</div>
-                        `;
-                        
-                        contenedor.appendChild(tarjeta);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error al cargar:", error);
-                    document.getElementById('contenedor-mensajes').innerHTML = 
-                        "<p style='color:#ff6b6b; text-align:center;'>Asegúrate de que 'Mis_Semillas_Vicente.json' esté en la misma carpeta que este HTML.</p>";
-                });
+            // 3. Dibujar tu mensaje en la pantalla
+            datosSegurosVicente.mensajesComunidad.forEach(msg => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'tarjeta-mensaje';
+                
+                tarjeta.innerHTML = `
+                    <div class="autor">✍️ ${msg.autor}</div>
+                    <div class="texto-msg">"${msg.texto}"</div>
+                    <div class="fecha">${msg.fecha}</div>
+                `;
+                
+                contenedor.appendChild(tarjeta);
+            });
         };
     </script>
 </body>
