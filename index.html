@@ -7,8 +7,14 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #1a1a1a; color: white; padding: 20px; }
         .contenedor { max-width: 500px; margin: auto; background: #333; padding: 20px; border-radius: 20px; border: 3px solid #ffd700; }
-        .boton { display: block; width: 90%; margin: 15px auto; padding: 15px; background: #ffd700; color: black; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1em; transition: 0.3s; }
+        .boton { display: block; width: 90%; margin: 15px auto; padding: 15px; background: #ffd700; color: black; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1em; transition: 0.3s; cursor: pointer; border: none; }
         .boton:hover { background: #fff; }
+        
+        /* Nuevo estilo para mostrar las semillas */
+        .pantalla-semillas { margin: 20px auto; padding: 15px; background: #222; border-radius: 10px; border: 2px solid #ffd700; min-height: 60px; display: none; text-align: left; }
+        .pantalla-semillas h4 { margin-top: 0; color: #ffd700; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        .semilla-texto { font-style: italic; color: #eee; line-height: 1.4; }
+
         .zona-tecnica { margin-top: 30px; padding: 15px; background: #444; border-radius: 10px; border: 1px dashed #ffd700; }
         .enlace-rust { color: #ffd700; text-decoration: underline; font-weight: bold; }
         h1 { color: #ffd700; margin-bottom: 5px; }
@@ -20,13 +26,19 @@
         <h1>🚖 Red de Honor</h1>
         <p class="frase">"Sembremos pensamientos útiles"</p>
 
-        <!-- Botones de Vida y Superación -->
-        <a href="#" class="boton">🚕 EL TAXI</a>
-        <a href="#" class="boton">📚 ENSEÑAR / APRENDER</a>
-        <a href="#" class="boton">⚽ DEPORTE Y SALUD</a>
-        <a href="#" class="boton">🤖 IA Y TECNOLOGÍA</a>
+        <!-- Botones de Vida y Superación (Convertidos en botones de acción) -->
+        <button class="boton" onclick="mostrarSemilla('taxi')">🚕 EL TAXI</button>
+        <button class="boton" onclick="mostrarSemilla('ensenar')">📚 ENSEÑAR / APRENDER</button>
+        <button class="boton" onclick="mostrarSemilla('deporte')">⚽ DEPORTE Y SALUD</button>
+        <button class="boton" onclick="mostrarSemilla('tecnologia')">🤖 IA Y TECNOLOGÍA</button>
 
-        <!-- EL ENSAMBLAJE: Aquí conectamos con los archivos de ayer -->
+        <!-- Zona Interactiva donde brotarán tus pensamientos -->
+        <div id="pantalla" class="pantalla-semillas">
+            <h4 id="pantalla-titulo">Categoría</h4>
+            <p id="pantalla-contenido" class="semilla-texto">Cargando pensamientos...</p>
+        </div>
+
+        <!-- EL ENSAMBLAJE: Conexión con GitHub -->
         <div class="zona-tecnica">
             <h3>🛡️ MOTOR DE SEGURIDAD</h3>
             <p>Infraestructura de confianza (Rust)</p>
@@ -37,8 +49,53 @@
 
         <p style="font-size: 0.8em; margin-top: 20px;">Legado Digital Abierto - Barcelona 2026</p>
     </div>
+
+    <!-- CÓDIGO DE CONEXIÓN JAVASCRIPT -->
+    <script>
+        let datosSemillas = {};
+
+        // 1. Cargamos el archivo JSON de tu ordenador automáticamente al abrir la página
+        fetch('Mis_Semillas_Vicente.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No se pudo encontrar el archivo JSON');
+                }
+                return response.json();
+            })
+            .then(data => {
+                datosSemillas = data;
+                console.log("Semillas cargadas con éxito", data);
+            })
+            .catch(error => {
+                console.error("Error al cargar las semillas:", error);
+                document.getElementById('pantalla-contenido').innerText = "Por favor, asegúrate de que 'Mis_Semillas_Vicente.json' está en la misma carpeta que este archivo HTML.";
+            });
+
+        // 2. Función para mostrar la información en pantalla al pulsar los botones
+        function mostrarSemilla(categoria) {
+            const pantalla = document.getElementById('pantalla');
+            const titulo = document.getElementById('pantalla-titulo');
+            const contenido = document.getElementById('pantalla-contenido');
+            
+            pantalla.style.display = 'block'; // Mostramos el recuadro
+
+            // Títulos según la categoría pulsada
+            const nombresCategorias = {
+                'taxi': '🚕 Pensamientos sobre El Taxi',
+                'ensenar': '📚 Enseñar / Aprender',
+                'deporte': '⚽ Deporte y Salud',
+                'tecnologia': '🤖 IA y Tecnología'
+            };
+
+            titulo.innerText = nombresCategorias[categoria];
+
+            // Buscamos el texto dentro de tu JSON cargado
+            if (datosSemillas && datosSemillas[categoria]) {
+                contenido.innerText = datosSemillas[categoria];
+            } else {
+                contenido.innerText = "Sembremos un pensamiento... (Aún no hay texto definido para esta categoría en el JSON).";
+            }
+        }
+    </script>
 </body>
 </html>
-  
-
-
