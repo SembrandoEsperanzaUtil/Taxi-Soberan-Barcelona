@@ -23,7 +23,7 @@ impl NodoTaxi {
         // El escudo contra "bandidos" remotos: se requieren ambas presencias físicas
         if firma_biometrica_propia && firma_guardian {
             if self.ahorro_tokens >= importe {
-                self.ahorro_tokens -= importe;
+                self.invertir_en_gasto(importe);
                 Ok(format!("Pago de {} tokens autorizado con éxito. La unión hace la fuerza.", importe))
             } else {
                 Err("Fondos insuficientes en el Token de la Esperanza.".to_string())
@@ -32,12 +32,17 @@ impl NodoTaxi {
             Err("ALERTA: Intento de acceso sin doble validación física. Bloqueando fondos.".to_string())
         }
     }
+
+    // Función auxiliar para restar los tokens de forma segura
+    fn invertir_en_gasto(&mut self, importe: f64) {
+        self.ahorro_tokens -= importe;
+    }
 }
 
 fn main() {
-    println!("--- Iniciando Nodo de Honor: Taxi Barcelona ---");
+    println!("--- Iniciando Nodo de Honor: Taxi Barcelona ---\n");
     
-    // Ejemplo de uso para Vicente y su Jefe
+    // 1. Creamos el Taxi de Vicente con 1000 tokens en su hucha
     let mut taxi_vicente = NodoTaxi {
         licencia: "AMB-1234".to_string(),
         ahorro_tokens: 1000.0,
@@ -45,5 +50,24 @@ fn main() {
         esta_bloqueado: false,
     };
 
-    println!("Estado actual: {:?}", taxi_vicente);
+    println!("Estado inicial del taxi: {:?}", taxi_vicente);
+    println!("--------------------------------------------------");
+
+    // SIMULACIÓN 1: Vicente va al taller y el Jefe autoriza (Doble firma correcta)
+    println!("Simulando operación legítima (Vicente + Guardián)...");
+    match taxi_vicente.autorizar_gasto(250.0, true, true) {
+        Ok(mensaje) => println!("🟢 ÉXITO: {}", mensaje),
+        Err(error) => println!("🔴 ERROR: {}", error),
+    }
+    println!("Hucha actual de Vicente: {} tokens\n", taxi_vicente.ahorro_tokens);
+
+    // SIMULACIÓN 2: Un intruso intenta sacar dinero a distancia (Falta la firma del Guardián)
+    println!("Simulando intento de fraude (Falta firma del Guardián)...");
+    match taxi_vicente.autorizar_gasto(100.0, true, false) {
+        Ok(mensaje) => println!("🟢 ÉXITO: {}", mensaje),
+        Err(error) => println!("🚨 ALERTA DEL SISTEMA: {}", error),
+    }
+    
+    println!("--------------------------------------------------");
+    println!("--- Fin de la operación del Nodo ---");
 }
