@@ -3,105 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Red de Honor Taxi - Barcelona</title>
+    <title>Taxi Soberano - Barcelona</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #1a1a1a; color: white; padding: 20px; }
-        .contenedor { max-width: 500px; margin: auto; background: #333; padding: 20px; border-radius: 20px; border: 3px solid #ffd700; }
-        
-        /* Estilo para la Hucha Colectiva */
-        .hucha-seccion { background: #222; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #ffd700; }
-        .hucha-valor { font-size: 2em; color: #ffd700; font-weight: bold; margin: 5px 0; }
-
-        .boton { display: block; width: 90%; margin: 15px auto; padding: 15px; background: #ffd700; color: black; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1em; transition: 0.3s; cursor: pointer; border: none; }
-        .boton:hover { background: #fff; }
-        
-        /* Contenedor de Mensajes de la Comunidad */
-        .pantalla-mensajes { margin: 20px auto; padding: 15px; background: #222; border-radius: 10px; border: 2px solid #ffd700; text-align: left; }
-        .pantalla-mensajes h3 { margin-top: 0; color: #ffd700; border-bottom: 1px solid #444; padding-bottom: 5px; text-align: center; }
-        
-        .tarjeta-mensaje { background: #2a2a2a; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ffd700; }
-        .autor { font-weight: bold; color: #ffd700; font-size: 0.9em; }
-        .texto-msg { font-style: italic; margin: 5px 0; color: #eee; }
-        .fecha { font-size: 0.75em; color: #888; text-align: right; }
-
-        .zona-tecnica { margin-top: 30px; padding: 15px; background: #444; border-radius: 10px; border: 1px dashed #ffd700; }
-        .enlace-rust { color: #ffd700; text-decoration: underline; font-weight: bold; }
-        h1 { color: #ffd700; margin-bottom: 5px; }
-        .frase { font-style: italic; color: #ccc; margin-bottom: 20px; }
+        :root { 
+            --bg-principal: #121212; /* Negro profundo de fondo */
+            --taxi-amarillo: #f1c40f; /* El amarillo icónico de Barcelona */
+            --taxi-negro: #1e1e1e; /* Negro de los paneles */
+            --oro-honor: #d4af37; /* El toque dorado para los valores */
+            --texto-claro: #f5f5f5;
+        }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background-color: var(--bg-principal);
+            background-image: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 20px; color: var(--texto-claro);
+        }
+        .contenedor { 
+            background: var(--taxi-negro); padding: 40px; border-radius: 30px; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8); max-width: 650px; width: 100%; 
+            text-align: center; border-top: 10px solid var(--taxi-amarillo); border-bottom: 4px solid var(--oro-honor);
+        }
+        h1 { color: var(--taxi-amarillo); margin: 0; font-size: 2.4em; letter-spacing: -0.5px; text-transform: uppercase; }
+        .subtitulo { 
+            color: var(--oro-honor); display: inline-block; padding: 5px 20px; 
+            font-weight: bold; font-style: italic; margin-top: 10px; letter-spacing: 1px;
+        }
+        .aviso-motor {
+            background: rgba(241, 196, 15, 0.1); border: 1px dashed var(--taxi-amarillo);
+            padding: 15px; border-radius: 15px; margin: 25px 0; color: #e6b800; font-size: 0.95em;
+        }
+        .caja-botones { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 25px; }
+        .btn-taxi { 
+            background: var(--bg-principal); color: var(--taxi-amarillo); border: 2px solid var(--taxi-amarillo);
+            padding: 15px 25px; border-radius: 15px; font-weight: bold; font-size: 1em; cursor: not-allowed; transition: 0.3s;
+        }
+        .pie-pagina { margin-top: 30px; font-size: 0.8em; color: #777; font-style: italic; }
     </style>
 </head>
 <body>
-    <div class="contenedor">
-        <h1>🚖 Red de Honor</h1>
-        <p class="frase">"Sembremos pensamientos útiles"</p>
 
-        <!-- SECCIÓN DE LA HUCHA DIGITAL -->
-        <div class="hucha-seccion">
-            <span>💰 HUCHA COMUNITARIA</span>
-            <div id="valor-hucha" class="hucha-valor">50 €</div>
-        </div>
-
-        <!-- SECCIÓN DE MENSAJES (Se cargan automáticamente del JSON) -->
-        <div class="pantalla-mensajes">
-            <h3>💬 Mensajes en la Red</h3>
-            <div id="contenedor-mensajes">
-                <p style="text-align:center; color:#aaa;">Cargando mensajes de la red descentralizada...</p>
-            </div>
-        </div>
-
-        <!-- Botón para simular envío futuro -->
-        <button class="boton" onclick="alert('¡Próximamente! El motor Rust (main.rs) gestionará el envío seguro de tus mensajes.')">✍️ ENVIAR MI MENSAJE</button>
-
-        <!-- EL ENSAMBLAJE: Conexión con GitHub -->
-        <div class="zona-tecnica">
-            <h3>🛡️ MOTOR DE SEGURIDAD</h3>
-            <p>Infraestructura de confianza (Rust)</p>
-            <a href="https://github.com/SembrandoEsperanzaUtil/pensamientos-utiles/blob/main/main.rs" class="enlace-rust">VER CÓDIGO FUENTE (main.rs)</a>
-            <br><br>
-            <a href="https://github.com/SembrandoEsperanzaUtil/pensamientos-utiles/blob/main/Cargo.toml" class="enlace-rust">FICHA TÉCNICA (Cargo.toml)</a>
-        </div>
-
-        <p style="font-size: 0.8em; margin-top: 20px;">Legado Digital Abierto - Barcelona 2026</p>
+<div class="contenedor">
+    <h1>Taxi Soberano</h1>
+    <span class="subtitulo">Red de Honor - Barcelona</span>
+    
+    <div style="font-size: 0.9em; color: #aaa; margin-top: 20px; line-height: 1.6;">
+        "Los pensamientos, los dejamos sembrados cada día, como las flores, como la fruta, como el amor por el prójimo..."
     </div>
 
-    <!-- CÓDIGO DE CONEXIÓN JAVASCRIPT REVISADO -->
-   <!-- CÓDIGO DE CONEXIÓN INTERNA (TRUCO TEMPORAL) -->
-    <script>
-        // Metemos tus datos directamente aquí para saltarnos el bloqueo del navegador
-        const datosSegurosVicente = {
-            "hucha": 0,
-            "mensajesComunidad": [
-                {
-                    "autor": "Vicente",
-                    "texto": "Quiero ser el primero en mandar mi mensaje al mundo, para que todo aquel que quiera escribir. Y conectar a traves de una red descentralizada.",
-                    "fecha": "1/30/2026, 10:56:12 PM"
-                }
-            ]
-        };
+    <div class="aviso-motor">
+        ⚙️ <strong>Estado del Sistema:</strong> La carrocería visual está lista. El motor de confianza en Rust (<code>main.rs</code>) gestionará los envíos de seguridad de forma blindada en la siguiente fase.
+    </div>
 
-        // Al cargar la página, se dibuja todo automáticamente sin buscar archivos externos
-        window.onload = function() {
-            // 1. Actualizar la hucha
-            document.getElementById('valor-hucha').innerText = datosSegurosVicente.hucha + " €";
+    <div class="caja-botones">
+        <button class="btn-taxi">🚕 Registrar Trayecto</button>
+        <button class="btn-taxi">🤝 Validar Honor</button>
+    </div>
+    
+    <div class="pie-pagina">
+        Desarrollado por SembrandoEsperanzaUtil bajo tecnología Rust & HTML
+    </div>
+</div>
 
-            // 2. Limpiar el contenedor de mensajes
-            const contenedor = document.getElementById('contenedor-mensajes');
-            contenedor.innerHTML = "";
-
-            // 3. Dibujar tu mensaje en la pantalla
-            datosSegurosVicente.mensajesComunidad.forEach(msg => {
-                const tarjeta = document.createElement('div');
-                tarjeta.className = 'tarjeta-mensaje';
-                
-                tarjeta.innerHTML = `
-                    <div class="autor">✍️ ${msg.autor}</div>
-                    <div class="texto-msg">"${msg.texto}"</div>
-                    <div class="fecha">${msg.fecha}</div>
-                `;
-                
-                contenedor.appendChild(tarjeta);
-            });
-        };
-    </script>
 </body>
 </html>
