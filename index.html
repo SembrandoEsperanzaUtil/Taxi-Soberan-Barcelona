@@ -6,10 +6,10 @@
     <title>Taxi Soberano - Barcelona</title>
     <style>
         :root { 
-            --bg-principal: #121212; /* Negro profundo de fondo */
-            --taxi-amarillo: #f1c40f; /* El amarillo icónico de Barcelona */
-            --taxi-negro: #1e1e1e; /* Negro de los paneles */
-            --oro-honor: #d4af37; /* El toque dorado para los valores */
+            --bg-principal: #121212; 
+            --taxi-amarillo: #f1c40f; 
+            --taxi-negro: #1e1e1e; 
+            --oro-honor: #d4af37; 
             --texto-claro: #f5f5f5;
         }
         body { 
@@ -19,25 +19,36 @@
             min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 20px; color: var(--texto-claro);
         }
         .contenedor { 
-            background: var(--taxi-negro); padding: 40px; border-radius: 30px; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8); max-width: 650px; width: 100%; 
+            background: var(--taxi-negro); padding: 30px; border-radius: 30px; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8); max-width: 600px; width: 100%; 
             text-align: center; border-top: 10px solid var(--taxi-amarillo); border-bottom: 4px solid var(--oro-honor);
         }
-        h1 { color: var(--taxi-amarillo); margin: 0; font-size: 2.4em; letter-spacing: -0.5px; text-transform: uppercase; }
-        .subtitulo { 
-            color: var(--oro-honor); display: inline-block; padding: 5px 20px; 
-            font-weight: bold; font-style: italic; margin-top: 10px; letter-spacing: 1px;
-        }
-        .aviso-motor {
-            background: rgba(241, 196, 15, 0.1); border: 1px dashed var(--taxi-amarillo);
-            padding: 15px; border-radius: 15px; margin: 25px 0; color: #e6b800; font-size: 0.95em;
-        }
-        .caja-botones { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 25px; }
-        .btn-taxi { 
-            background: var(--bg-principal); color: var(--taxi-amarillo); border: 2px solid var(--taxi-amarillo);
-            padding: 15px 25px; border-radius: 15px; font-weight: bold; font-size: 1em; cursor: not-allowed; transition: 0.3s;
-        }
-        .pie-pagina { margin-top: 30px; font-size: 0.8em; color: #777; font-style: italic; }
+        h1 { color: var(--taxi-amarillo); margin: 0; font-size: 2.2em; text-transform: uppercase; }
+        .subtitulo { color: var(--oro-honor); display: inline-block; padding: 5px 20px; font-weight: bold; font-style: italic; margin-top: 5px; }
+        
+        /* Caja de la Hucha */
+        .hucha-box { background: rgba(241, 196, 15, 0.05); border: 2px solid var(--taxi-amarillo); border-radius: 20px; padding: 15px; margin: 20px 0; }
+        .hucha-titulo { font-size: 0.9em; color: #aaa; letter-spacing: 1px; }
+        .hucha-valor { font-size: 2.5em; color: var(--taxi-amarillo); font-weight: bold; margin-top: 5px; }
+
+        /* Formulario de Simulación */
+        .zona-interactiva { background: rgba(255,255,255,0.02); border: 1px solid #2a2a2a; border-radius: 20px; padding: 20px; margin-top: 20px; text-align: left; }
+        h2 { color: var(--taxi-amarillo); font-size: 1.2em; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        .campo { margin-bottom: 15px; }
+        label { display: block; font-size: 0.9em; color: #ccc; margin-bottom: 5px; }
+        input[type="number"] { width: 100%; padding: 12px; background: #121212; border: 1px solid #444; border-radius: 10px; color: white; font-size: 1em; box-sizing: border-box; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 10px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #2d2d2d; }
+        input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+
+        /* Botón de Acción */
+        .btn-gasto { w-index: 1; width: 100%; background: var(--taxi-amarillo); color: black; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 1.1em; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-gasto:hover { background: white; }
+
+        /* Pantalla de Estado/Terminal */
+        .consola-status { background: #000; border-left: 4px solid var(--oro-honor); padding: 15px; border-radius: 10px; margin-top: 20px; font-family: monospace; font-size: 0.9em; text-align: left; color: #aaffaa; min-height: 40px; }
+
+        .frase { font-size: 0.9em; color: #aaa; margin: 20px 0; font-style: italic; line-height: 1.5; }
+        .pie-pagina { margin-top: 30px; font-size: 0.75em; color: #555; }
     </style>
 </head>
 <body>
@@ -46,23 +57,88 @@
     <h1>Taxi Soberano</h1>
     <span class="subtitulo">Red de Honor - Barcelona</span>
     
-    <div style="font-size: 0.9em; color: #aaa; margin-top: 20px; line-height: 1.6;">
+    <div class="frase">
         "Los pensamientos, los dejamos sembrados cada día, como las flores, como la fruta, como el amor por el prójimo..."
     </div>
 
-    <div class="aviso-motor">
-        ⚙️ <strong>Estado del Sistema:</strong> La carrocería visual está lista. El motor de confianza en Rust (<code>main.rs</code>) gestionará los envíos de seguridad de forma blindada en la siguiente fase.
+    <div class="hucha-box">
+        <div class="hucha-titulo">💰 TOKENS DISPONIBLES (NODO VICENTE)</div>
+        <div id="pantalla-hucha" class="hucha-valor">1000.00</div>
     </div>
 
-    <div class="caja-botones">
-        <button class="btn-taxi">🚕 Registrar Trayecto</button>
-        <button class="btn-taxi">🤝 Validar Honor</button>
+    <div class="zona-interactiva">
+        <h2>🛠️ Ventanilla de Gasto (Doble Firma Física)</h2>
+        
+        <div class="campo">
+            <label for="importe">Importe del Gasto (Tokens para Taller/Combustible):</label>
+            <input type="number" id="importe" value="250" min="1">
+        </div>
+
+        <div class="campo">
+            <label>Validación de Seguridad Presencial:</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="firma-vicente" checked>
+                <label style="margin:0; cursor:pointer;" for="firma-vicente">🔑 Presencia Física de Vicente (Huella/Pin)</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="firma-guardian" id="firma-guardian">
+                <label style="margin:0; cursor:pointer;" for="firma-guardian">🛡️ Presencia Física del Guardián (El Jefe)</label>
+            </div>
+        </div>
+
+        <button class="btn-gasto" onclick="ejecutarMotorRust()">🚕 Procesar Solicitud de Pago</button>
+    </div>
+
+    <div id="consola" class="consola-status">
+        [Sistema] Esperando orden. Configura el importe y las firmas para probar la seguridad.
     </div>
     
     <div class="pie-pagina">
-        Desarrollado por SembrandoEsperanzaUtil bajo tecnología Rust & HTML
+        Infraestructura Lógica basada en main.rs (Rust) • Legado Digital Abierto 2026
     </div>
 </div>
+
+<script>
+    // Inicializamos la hucha con los mismos 1000 tokens de tu código Rust
+    let ahorroTokens = 1000.0;
+
+    function ejecutarMotorRust() {
+        const importeInput = document.getElementById('importe').value;
+        const importe = parseFloat(importeInput);
+        const firmaVicente = document.getElementById('firma-vicente').checked;
+        const firmaGuardian = document.getElementById('firma-guardian').checked;
+        const consola = document.getElementById('consola');
+        const pantallaHucha = document.getElementById('pantalla-hucha');
+
+        // Validación de número correcto
+        if (isNaN(importe) || importe <= 0) {
+            consola.style.color = "#ff6b6b";
+            consola.innerHTML = "🔴 ERROR: Introduce un número válido y mayor que cero.";
+            return;
+        }
+
+        consola.style.color = "#aaffaa";
+        consola.innerHTML = "⏳ [Rust] Validando firmas físicas en el nodo central...";
+
+        // Ejecutamos exactamente las mismas reglas de honor de tu main.rs
+        setTimeout(() => {
+            if (firmaVicente && firmaGuardian) {
+                if (ahorroTokens >= importe) {
+                    ahorroTokens -= importe; // Restamos el dinero
+                    pantallaHucha.innerText = ahorroTokens.toFixed(2); // Actualizamos la hucha grande
+                    consola.style.color = "#6bff6b";
+                    consola.innerHTML = `🟢 ÉXITO: Pago de ${importe.toFixed(2)} tokens autorizado con éxito. La unión hace la fuerza.`;
+                } else {
+                    consola.style.color = "#ff6b6b";
+                    consola.innerHTML = "🔴 ERROR: Fondos insuficientes en el Token de la Esperanza.";
+                }
+            } else {
+                consola.style.color = "#ff4444";
+                consola.innerHTML = "🚨 ALERTA: Intento de acceso sin doble validación física. Bloqueando fondos.";
+            }
+        }, 600); // Simulamos medio segundo de procesado para darle realismo técnico
+    }
+</script>
 
 </body>
 </html>
