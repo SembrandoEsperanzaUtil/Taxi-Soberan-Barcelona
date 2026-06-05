@@ -11,44 +11,66 @@
             --taxi-negro: #1e1e1e; 
             --oro-honor: #d4af37; 
             --texto-claro: #f5f5f5;
+            --verde-exito: #2ecc71;
         }
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
             background-color: var(--bg-principal);
             background-image: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
-            min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 20px; color: var(--texto-claro);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 15px; color: var(--texto-claro);
+            box-sizing: border-box;
         }
         .contenedor { 
-            background: var(--taxi-negro); padding: 30px; border-radius: 30px; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8); max-width: 600px; width: 100%; 
+            background: var(--taxi-negro); padding: 25px; border-radius: 30px; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8); max-width: 550px; width: 100%; 
             text-align: center; border-top: 10px solid var(--taxi-amarillo); border-bottom: 4px solid var(--oro-honor);
+            box-sizing: border-box;
         }
-        h1 { color: var(--taxi-amarillo); margin: 0; font-size: 2.2em; text-transform: uppercase; }
+        h1 { color: var(--taxi-amarillo); margin: 0; font-size: 2.2em; text-transform: uppercase; letter-spacing: 1px; }
         .subtitulo { color: var(--oro-honor); display: inline-block; padding: 5px 20px; font-weight: bold; font-style: italic; margin-top: 5px; }
         
-        /* Caja de la Hucha */
-        .hucha-box { background: rgba(241, 196, 15, 0.05); border: 2px solid var(--taxi-amarillo); border-radius: 20px; padding: 15px; margin: 20px 0; }
-        .hucha-titulo { font-size: 0.9em; color: #aaa; letter-spacing: 1px; }
-        .hucha-valor { font-size: 2.5em; color: var(--taxi-amarillo); font-weight: bold; margin-top: 5px; }
+        .frase { font-size: 0.95em; color: #ccc; margin: 20px 0; font-style: italic; line-height: 1.6; padding: 0 10px; }
 
-        /* Formulario de Simulación */
-        .zona-interactiva { background: rgba(255,255,255,0.02); border: 1px solid #2a2a2a; border-radius: 20px; padding: 20px; margin-top: 20px; text-align: left; }
-        h2 { color: var(--taxi-amarillo); font-size: 1.2em; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        /* Cuadrícula de Billeteras (Doble hucha) */
+        .billeteras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .hucha-box { background: rgba(255,255,255,0.02); border-radius: 20px; padding: 15px; text-align: center; box-sizing: border-box; }
+        .hucha-box.privada { border: 2px solid var(--taxi-amarillo); rgba(241, 196, 15, 0.02); }
+        .hucha-box.social { border: 2px solid var(--oro-honor); rgba(212, 175, 55, 0.02); }
+        .hucha-titulo { font-size: 0.8em; color: #aaa; font-weight: bold; letter-spacing: 0.5px; }
+        .hucha-valor { font-size: 1.8em; font-weight: bold; margin-top: 8px; }
+        #pantalla-privada { color: var(--taxi-amarillo); }
+        #pantalla-social { color: var(--oro-honor); }
+
+        /* Secciones de Trabajo */
+        .zona-interactiva { background: rgba(255,255,255,0.01); border: 1px solid #2d2d2d; border-radius: 20px; padding: 20px; margin-top: 20px; text-align: left; }
+        h2 { color: var(--taxi-amarillo); font-size: 1.1em; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 8px; text-transform: uppercase; }
+        
         .campo { margin-bottom: 15px; }
-        label { display: block; font-size: 0.9em; color: #ccc; margin-bottom: 5px; }
-        input[type="number"] { width: 100%; padding: 12px; background: #121212; border: 1px solid #444; border-radius: 10px; color: white; font-size: 1em; box-sizing: border-box; }
-        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 10px; background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #2d2d2d; }
-        input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+        label { display: block; font-size: 0.85em; color: #bbb; margin-bottom: 6px; font-weight: 500; }
+        input[type="number"], input[type="text"] { width: 100%; padding: 12px; background: #121212; border: 1px solid #444; border-radius: 10px; color: white; font-size: 1em; box-sizing: border-box; }
+        input[type="text"] { font-style: italic; }
+        
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 8px; background: #161616; padding: 12px; border-radius: 10px; border: 1px solid #282828; }
+        input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--taxi-amarillo); }
 
-        /* Botón de Acción */
-        .btn-gasto { w-index: 1; width: 100%; background: var(--taxi-amarillo); color: black; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 1.1em; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-gasto:hover { background: white; }
+        /* Botones */
+        .btn-accion { width: 100%; color: black; border: none; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 1.05em; cursor: pointer; transition: 0.3s; margin-top: 5px; text-transform: uppercase; }
+        .btn-amarillo { background: var(--taxi-amarillo); }
+        .btn-amarillo:hover { background: white; }
+        .btn-oro { background: var(--oro-honor); color: white; }
+        .btn-oro:hover { background: white; color: black; }
 
-        /* Pantalla de Estado/Terminal */
-        .consola-status { background: #000; border-left: 4px solid var(--oro-honor); padding: 15px; border-radius: 10px; margin-top: 20px; font-family: monospace; font-size: 0.9em; text-align: left; color: #aaffaa; min-height: 40px; }
+        /* Consola de Estado */
+        .consola-status { background: #000; border-left: 4px solid var(--taxi-amarillo); padding: 15px; border-radius: 10px; margin-top: 20px; font-family: monospace; font-size: 0.85em; text-align: left; color: #aaffaa; min-height: 40px; line-height: 1.4; word-break: break-word; }
 
-        .frase { font-size: 0.9em; color: #aaa; margin: 20px 0; font-style: italic; line-height: 1.5; }
-        .pie-pagina { margin-top: 30px; font-size: 0.75em; color: #555; }
+        /* Historial de Pensamientos Sembrados */
+        .historial-seccion { margin-top: 25px; text-align: left; }
+        .historial-titulo { font-size: 0.9em; color: var(--oro-honor); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tarjeta-mensaje { background: #1a1a1a; padding: 12px; border-radius: 10px; border-left: 3px solid var(--oro-honor); margin-bottom: 10px; font-size: 0.9em; }
+        .mensaje-texto { font-style: italic; color: #eee; margin-bottom: 4px; }
+        .mensaje-autor { font-size: 0.8em; color: #888; text-align: right; }
+
+        .pie-pagina { margin-top: 30px; font-size: 0.75em; color: #444; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
@@ -58,85 +80,160 @@
     <span class="subtitulo">Red de Honor - Barcelona</span>
     
     <div class="frase">
-        "Los pensamientos, los dejamos sembrados cada día, como las flores, como la fruta, como el amor por el prójimo..."
+        "Los pensamientos, los dejamos sembrados cada día, como las flores, como la fruta, como el amor por el prójimo. Sin esos pensamientos, las personas no seríamos personas."
     </div>
 
-    <div class="hucha-box">
-        <div class="hucha-titulo">💰 TOKENS DISPONIBLES (NODO VICENTE)</div>
-        <div id="pantalla-hucha" class="hucha-valor">1000.00</div>
+    <div class="billeteras-grid">
+        <div class="hucha-box privada">
+            <div class="hucha-titulo">💰 BOLSILLO PRIVADO</div>
+            <div id="pantalla-privada" class="hucha-valor">1000.00</div>
+            <div style="font-size:0.75em; color:#f1c40f; margin-top:2px; font-weight:bold;">TEU DISPONIBLES</div>
+        </div>
+        <div class="hucha-box social">
+            <div class="hucha-titulo">🌱 APORTACIÓN SOCIAL</div>
+            <div id="pantalla-social" class="hucha-valor">0.00</div>
+            <div style="font-size:0.75em; color:#d4af37; margin-top:2px; font-weight:bold;">TEU SEMBRADOS</div>
+        </div>
     </div>
 
     <div class="zona-interactiva">
-        <h2>🛠️ Ventanilla de Gasto (Doble Firma Física)</h2>
-        
+        <h2>🛠️ Ventanilla de Gasto (Doble Firma)</h2>
         <div class="campo">
-            <label for="importe">Importe del Gasto (Tokens para Taller/Combustible):</label>
-            <input type="number" id="importe" value="250" min="1">
+            <label for="importe-gasto">Importe a retirar (Talleres / Seguro / Combustible):</label>
+            <input type="number" id="importe-gasto" value="250" min="1">
         </div>
-
         <div class="campo">
-            <label>Validación de Seguridad Presencial:</label>
+            <label>Validación de Seguridad Física Simultánea:</label>
             <div class="checkbox-group">
                 <input type="checkbox" id="firma-vicente" checked>
-                <label style="margin:0; cursor:pointer;" for="firma-vicente">🔑 Presencia Física de Vicente (Huella/Pin)</label>
+                <label style="margin:0; cursor:pointer;" for="firma-vicente">🔑 Firma Presencial de Vicente</label>
             </div>
             <div class="checkbox-group">
-                <input type="checkbox" id="firma-guardian" id="firma-guardian">
-                <label style="margin:0; cursor:pointer;" for="firma-guardian">🛡️ Presencia Física del Guardián (El Jefe)</label>
+                <input type="checkbox" id="firma-guardian">
+                <label style="margin:0; cursor:pointer;" for="firma-guardian">🛡️ Firma Presencial del Guardián (El Jefe)</label>
             </div>
         </div>
+        <button class="btn-accion btn-amarillo" onclick="procesarGastoTaller()">🚕 Autorizar Pago</button>
+    </div>
 
-        <button class="btn-gasto" onclick="ejecutarMotorRust()">🚕 Procesar Solicitud de Pago</button>
+    <div class="zona-interactiva" style="border-color: var(--oro-honor);">
+        <h2 style="color: var(--oro-honor);">🌱 Sembrar Pensamiento Útil</h2>
+        <div class="campo">
+            <label for="importe-siembra">Cantidad de Tokens TEU a sembrar:</label>
+            <input type="number" id="importe-siembra" value="150" min="1">
+        </div>
+        <div class="campo">
+            <label for="mensaje-siembra">Mensaje de Esperanza para registrar en la red:</label>
+            <input type="text" id="mensaje-siembra" value="Para el comedor social del barrio, que a nadie le falte un plato.">
+        </div>
+        <button class="btn-accion btn-oro" onclick="procesarSiembraSocial()">🌾 Sembrar en la Comunidad</button>
     </div>
 
     <div id="consola" class="consola-status">
-        [Sistema] Esperando orden. Configura el importe y las firmas para probar la seguridad.
+        [Sistema] Nodo operativo. Esperando acciones del conductor en el Área Metropolitana...
+    </div>
+
+    <div class="historial-seccion">
+        <div class="historial-titulo">💬 Registro de Siembre en la Red</div>
+        <div id="contenedor-mensajes">
+            </div>
     </div>
     
     <div class="pie-pagina">
-        Infraestructura Lógica basada en main.rs (Rust) • Legado Digital Abierto 2026
+        Infraestructura Descentralizada • Lógica de Seguridad main.rs (Rust)<br><b>Legado Digital Abierto — Barcelona 2026</b>
     </div>
 </div>
 
 <script>
-    // Inicializamos la hucha con los mismos 1000 tokens de tu código Rust
-    let ahorroTokens = 1000.0;
+    // Inicializamos las variables exactamente con los mismos valores del main.rs
+    let tokensPrivados = 1000.0;
+    let aportacionSocial = 0.0;
 
-    function ejecutarMotorRust() {
-        const importeInput = document.getElementById('importe').value;
-        const importe = parseFloat(importeInput);
+    const consola = document.getElementById('consola');
+    const pPrivada = document.getElementById('pantalla-privada');
+    const pSocial = document.getElementById('pantalla-social');
+    const contenedorMensajes = document.getElementById('contenedor-mensajes');
+
+    // REGLA 1: Procesar el gasto del taller (Requiere doble firma)
+    function procesarGastoTaller() {
+        const importe = parseFloat(document.getElementById('importe-gasto').value);
         const firmaVicente = document.getElementById('firma-vicente').checked;
         const firmaGuardian = document.getElementById('firma-guardian').checked;
-        const consola = document.getElementById('consola');
-        const pantallaHucha = document.getElementById('pantalla-hucha');
 
-        // Validación de número correcto
         if (isNaN(importe) || importe <= 0) {
-            consola.style.color = "#ff6b6b";
-            consola.innerHTML = "🔴 ERROR: Introduce un número válido y mayor que cero.";
+            escribirConsola("🔴 ERROR: Introduce un importe de gasto válido.", "#ff6b6b");
             return;
         }
 
-        consola.style.color = "#aaffaa";
-        consola.innerHTML = "⏳ [Rust] Validando firmas físicas en el nodo central...";
+        escribirConsola("⏳ [Rust] Validando firmas físicas simultáneas...", "#aaffaa");
 
-        // Ejecutamos exactamente las mismas reglas de honor de tu main.rs
         setTimeout(() => {
             if (firmaVicente && firmaGuardian) {
-                if (ahorroTokens >= importe) {
-                    ahorroTokens -= importe; // Restamos el dinero
-                    pantallaHucha.innerText = ahorroTokens.toFixed(2); // Actualizamos la hucha grande
-                    consola.style.color = "#6bff6b";
-                    consola.innerHTML = `🟢 ÉXITO: Pago de ${importe.toFixed(2)} tokens autorizado con éxito. La unión hace la fuerza.`;
+                if (tokensPrivados >= importe) {
+                    tokensPrivados -= importe;
+                    actualizarPantallas();
+                    escribirConsola(`🟢 ÉXITO: Pago de ${importe.toFixed(2)} tokens autorizado con éxito. La unión hace la fuerza.`, "#6bff6b");
                 } else {
-                    consola.style.color = "#ff6b6b";
-                    consola.innerHTML = "🔴 ERROR: Fondos insuficientes en el Token de la Esperanza.";
+                    escribirConsola("🔴 ERROR: Fondos insuficientes en el Token de la Esperanza.", "#ff6b6b");
                 }
             } else {
-                consola.style.color = "#ff4444";
-                consola.innerHTML = "🚨 ALERTA: Intento de acceso sin doble validación física. Bloqueando fondos.";
+                escribirConsola("🚨 ALERTA: Intento de acceso sin doble validación física. Bloqueando fondos por seguridad.", "#ff4444");
             }
-        }, 600); // Simulamos medio segundo de procesado para darle realismo técnico
+        }, 500);
+    }
+
+    // REGLA 2: Sembrar tokens para la comunidad (Aportación social)
+    function procesarSiembraSocial() {
+        const cantidad = parseFloat(document.getElementById('importe-siembra').value);
+        const mensaje = document.getElementById('mensaje-siembra').value.trim();
+
+        if (isNaN(cantidad) || cantidad <= 0) {
+            escribirConsola("🔴 ERROR: Introduce una cantidad de tokens válida para sembrar.", "#ff6b6b");
+            return;
+        }
+        if (mensaje === "") {
+            escribirConsola("🔴 ERROR: El mensaje de esperanza no puede estar vacío.", "#ff6b6b");
+            return;
+        }
+
+        escribirConsola("⏳ [Rust] Registrando pensamiento útil en la cadena de bloques...", "#aaffaa");
+
+        setTimeout(() => {
+            if (tokensPrivados >= cantidad) {
+                tokensPrivados -= cantidad;
+                aportacionSocial += cantidad;
+                actualizarPantallas();
+                escribirConsola(`🟢 SEMBRADO CON ÉXITO: Has aportado ${cantidad.toFixed(2)} TEU a la red social.`, "#6bff6b");
+                
+                // Añadir el mensaje al historial de la pantalla
+                agregarMensajeHistorial(mensaje, cantidad);
+            } else {
+                escribirConsola("🔴 ERROR: No tienes suficientes tokens TEU en tu bolsillo privado.", "#ff6b6b");
+            }
+        }, 500);
+    }
+
+    // Funciones Auxiliares del Cuadro de Mandos
+    function escribirConsola(texto, color) {
+        consola.style.color = color;
+        consola.innerHTML = texto;
+    }
+
+    function actualizarPantallas() {
+        pPrivada.innerText = tokensPrivados.toFixed(2);
+        pSocial.innerText = aportacionSocial.toFixed(2);
+    }
+
+    function agregarMensajeHistorial(texto, cantidad) {
+        const tarjeta = document.createElement('div');
+        const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        tarjeta.className = 'tarjeta-mensaje';
+        tarjeta.innerHTML = `
+            <div class="mensaje-texto">"${texto}"</div>
+            <div class="mensaje-autor">✍️ Vicente • <b>+${cantidad.toFixed(2)} TEU</b> a las ${fechaActual}</div>
+        `;
+        // Insertamos el nuevo mensaje arriba del todo del historial
+        contenedorMensajes.insertBefore(tarjeta, contenedorMensajes.firstChild);
     }
 </script>
 
