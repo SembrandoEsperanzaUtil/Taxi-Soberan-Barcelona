@@ -12,6 +12,7 @@
             --oro-honor: #d4af37; 
             --texto-claro: #f5f5f5;
             --verde-exito: #2ecc71;
+            --rojo-sos: #e74c3c;
         }
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
@@ -31,15 +32,25 @@
         
         .frase { font-size: 0.95em; color: #ccc; margin: 20px 0; font-style: italic; line-height: 1.6; padding: 0 10px; }
 
-        /* Cuadrícula de Billeteras (Doble hucha) */
+        /* Cuadrícula de Billeteras */
         .billeteras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
         .hucha-box { background: rgba(255,255,255,0.02); border-radius: 20px; padding: 15px; text-align: center; box-sizing: border-box; }
-        .hucha-box.privada { border: 2px solid var(--taxi-amarillo); rgba(241, 196, 15, 0.02); }
-        .hucha-box.social { border: 2px solid var(--oro-honor); rgba(212, 175, 55, 0.02); }
+        .hucha-box.privada { border: 2px solid var(--taxi-amarillo); }
+        .hucha-box.social { border: 2px solid var(--oro-honor); }
         .hucha-titulo { font-size: 0.8em; color: #aaa; font-weight: bold; letter-spacing: 0.5px; }
         .hucha-valor { font-size: 1.8em; font-weight: bold; margin-top: 8px; }
         #pantalla-privada { color: var(--taxi-amarillo); }
         #pantalla-social { color: var(--oro-honor); }
+
+        /* Botón de Emergencia SOS Máxima */
+        .zona-sos { background: rgba(231, 76, 60, 0.05); border: 3px dashed var(--rojo-sos); border-radius: 20px; padding: 20px; margin: 20px 0; text-align: center; }
+        .btn-sos { background: var(--rojo-sos); color: white; animation: pulso 2deg infinite alternate; font-size: 1.2em; box-shadow: 0 0 15px rgba(231, 76, 60, 0.4); }
+        .btn-sos:hover { background: white; color: var(--rojo-sos); }
+
+        @keyframes pulso {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(231, 76, 60, 0.4); }
+            100% { transform: scale(1.02); box-shadow: 0 0 25px rgba(231, 76, 60, 0.8); }
+        }
 
         /* Secciones de Trabajo */
         .zona-interactiva { background: rgba(255,255,255,0.01); border: 1px solid #2d2d2d; border-radius: 20px; padding: 20px; margin-top: 20px; text-align: left; }
@@ -63,10 +74,11 @@
         /* Consola de Estado */
         .consola-status { background: #000; border-left: 4px solid var(--taxi-amarillo); padding: 15px; border-radius: 10px; margin-top: 20px; font-family: monospace; font-size: 0.85em; text-align: left; color: #aaffaa; min-height: 40px; line-height: 1.4; word-break: break-word; }
 
-        /* Historial de Pensamientos Sembrados */
+        /* Historial / Tablón Común */
         .historial-seccion { margin-top: 25px; text-align: left; }
-        .historial-titulo { font-size: 0.9em; color: var(--oro-honor); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .tarjeta-mensaje { background: #1a1a1a; padding: 12px; border-radius: 10px; border-left: 3px solid var(--oro-honor); margin-bottom: 10px; font-size: 0.9em; }
+        .historial-titulo { font-size: 0.9em; color: var(--taxi-amarillo); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .tarjeta-mensaje { background: #1a1a1a; padding: 12px; border-radius: 10px; border-left: 4px solid var(--oro-honor); margin-bottom: 10px; font-size: 0.9em; }
+        .tarjeta-mensaje.sos { border-left: 4px solid var(--rojo-sos); background: #241414; }
         .mensaje-texto { font-style: italic; color: #eee; margin-bottom: 4px; }
         .mensaje-autor { font-size: 0.8em; color: #888; text-align: right; }
 
@@ -83,6 +95,12 @@
         "Los pensamientos, los dejamos sembrados cada día, como las flores, como la fruta, como el amor por el prójimo. Sin esos pensamientos, las personas no seríamos personas."
     </div>
 
+    <!-- IDENTIFICACIÓN DEL TURNO ACTUAL -->
+    <div style="font-size: 0.85em; color: #aaa; margin-bottom: 10px; background: #161616; padding: 8px; border-radius: 10px;">
+        👤 Conductor: <b>Vicente (IMET-5800)</b> | 🚖 Licencia: <b>AMB-1234</b>
+    </div>
+
+    <!-- DOBLE BILLETERA DIGITAL -->
     <div class="billeteras-grid">
         <div class="hucha-box privada">
             <div class="hucha-titulo">💰 BOLSILLO PRIVADO</div>
@@ -96,17 +114,24 @@
         </div>
     </div>
 
+    <!-- ¡NUEVA SECCIÓN!: BOTÓN DE EMERGENCIA SOS MULTIDIFUSIÓN -->
+    <div class="zona-sos">
+        <div style="font-size: 0.85em; color: var(--rojo-sos); font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🚨 Red de Auxilio Mutuo AMB</div>
+        <button class="btn-accion btn-sos" onclick="dispararAlertaSOS()">⚠️ PULSAR SOS EN CARRETERA</button>
+    </div>
+
+    <!-- VENTANILLA 1: EL MOTOR DE GASTOS (CON DOBLE FIRMA) -->
     <div class="zona-interactiva">
-        <h2>🛠️ Ventanilla de Gasto (Doble Firma)</h2>
+        <h2>🛠️ Ventanilla de Gasto (Consenso Presencial)</h2>
         <div class="campo">
-            <label for="importe-gasto">Importe a retirar (Talleres / Seguro / Combustible):</label>
+            <label for="importe-gasto">Importe a retirar (Talleres / Combustible):</label>
             <input type="number" id="importe-gasto" value="250" min="1">
         </div>
         <div class="campo">
-            <label>Validación de Seguridad Física Simultánea:</label>
+            <label>Validación Física Simultánea:</label>
             <div class="checkbox-group">
                 <input type="checkbox" id="firma-vicente" checked>
-                <label style="margin:0; cursor:pointer;" for="firma-vicente">🔑 Firma Presencial de Vicente</label>
+                <label style="margin:0; cursor:pointer;" for="firma-vicente">🔑 Mi Firma de Carnet (IMET-5800)</label>
             </div>
             <div class="checkbox-group">
                 <input type="checkbox" id="firma-guardian">
@@ -116,6 +141,7 @@
         <button class="btn-accion btn-amarillo" onclick="procesarGastoTaller()">🚕 Autorizar Pago</button>
     </div>
 
+    <!-- VENTANILLA 2: LA SIEMBRA SOCIAL -->
     <div class="zona-interactiva" style="border-color: var(--oro-honor);">
         <h2 style="color: var(--oro-honor);">🌱 Sembrar Pensamiento Útil</h2>
         <div class="campo">
@@ -129,14 +155,17 @@
         <button class="btn-accion btn-oro" onclick="procesarSiembraSocial()">🌾 Sembrar en la Comunidad</button>
     </div>
 
+    <!-- CONSOLA DE ESTADO (SIMULADOR TERMINAL RUST) -->
     <div id="consola" class="consola-status">
-        [Sistema] Nodo operativo. Esperando acciones del conductor en el Área Metropolitana...
+        [Sistema] Red de Honor IMET activa. Nodos enlazados y vigilando la ciudad...
     </div>
 
+    <!-- NUEVO: TABLÓN DIGITAL EN VIVO -->
     <div class="historial-seccion">
-        <div class="historial-titulo">💬 Registro de Siembre en la Red</div>
-        <div id="contenedor-mensajes">
-            </div>
+        <div class="historial-titulo">📱 TABLÓN DIGITAL DE LA PARADA (AMB)</div>
+        <div id="tablon-comun">
+            <!-- Los avisos ordinarios y de SOS aparecerán aquí en orden -->
+        </div>
     </div>
     
     <div class="pie-pagina">
@@ -145,75 +174,83 @@
 </div>
 
 <script>
-    // Inicializamos las variables exactamente con los mismos valores del main.rs
     let tokensPrivados = 1000.0;
     let aportacionSocial = 0.0;
 
     const consola = document.getElementById('consola');
     const pPrivada = document.getElementById('pantalla-privada');
     const pSocial = document.getElementById('pantalla-social');
-    const contenedorMensajes = document.getElementById('contenedor-mensajes');
+    const tablonComun = document.getElementById('tablon-comun');
 
-    // REGLA 1: Procesar el gasto del taller (Requiere doble firma)
+    // FUNCIÓN NUEVA: El Botón de SOS Multidifusión
+    function dispararAlertaSOS() {
+        escribirConsola("⏳ [Rust] ¡Multidifundiendo señal de auxilio a los nodos IMET de la zona!", "#ff6b6b");
+        
+        setTimeout(() => {
+            const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            escribirConsola(`🚨 !!! SOS MULTIDIFUSIÓN !!! Conductor [IMET-5800] (Licencia AMB-1234) SOLICITA AUXILIO.`, "#ff4444");
+            
+            // Creamos la tarjeta roja de SOS para el tablón
+            const tarjeta = document.createElement('div');
+            tarjeta.className = 'tarjeta-mensaje sos';
+            tarjeta.innerHTML = `
+                <div class="mensaje-texto" style="color: #ff8b8b; font-weight: bold;">⚠️ "¡Alerta en carretera! Necesito compañeros cerca de mi posición actual."</div>
+                <div class="mensaje-autor" style="color: #ffaaaa;">🚨 Emergencia • <b>Vicente (AMB-1234)</b> a las ${fechaActual}</div>
+            `;
+            tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
+        }, 400);
+    }
+
+    // Gasto taller por consenso
     function procesarGastoTaller() {
         const importe = parseFloat(document.getElementById('importe-gasto').value);
         const firmaVicente = document.getElementById('firma-vicente').checked;
         const firmaGuardian = document.getElementById('firma-guardian').checked;
 
         if (isNaN(importe) || importe <= 0) {
-            escribirConsola("🔴 ERROR: Introduce un importe de gasto válido.", "#ff6b6b");
+            escribirConsola("🔴 ERROR: Importe inválido.", "#ff6b6b");
             return;
         }
 
-        escribirConsola("⏳ [Rust] Validando firmas físicas simultáneas...", "#aaffaa");
-
-        setTimeout(() => {
-            if (firmaVicente && firmaGuardian) {
-                if (tokensPrivados >= importe) {
-                    tokensPrivados -= importe;
-                    actualizarPantallas();
-                    escribirConsola(`🟢 ÉXITO: Pago de ${importe.toFixed(2)} tokens autorizado con éxito. La unión hace la fuerza.`, "#6bff6b");
-                } else {
-                    escribirConsola("🔴 ERROR: Fondos insuficientes en el Token de la Esperanza.", "#ff6b6b");
-                }
+        if (firmaVicente && firmaGuardian) {
+            if (tokensPrivados >= importe) {
+                tokensPrivados -= importe;
+                actualizarPantallas();
+                escribirConsola(`🟢 CONSENSO: Taxista [IMET-5800] (Licencia AMB-1234) autorizó ${importe.toFixed(2)} TEU.`, "#6bff6b");
             } else {
-                escribirConsola("🚨 ALERTA: Intento de acceso sin doble validación física. Bloqueando fondos por seguridad.", "#ff4444");
+                escribirConsola("🔴 RECHAZADO: Fondos insuficientes.", "#ff6b6b");
             }
-        }, 500);
+        } else {
+            escribirConsola("🚨 ALERTA: Intento de fraude. El carnet IMET [IMET-5800] ha sido BLOQUEADO.", "#ff4444");
+        }
     }
 
-    // REGLA 2: Sembrar tokens para la comunidad (Aportación social)
+    // Siembra Social útil
     function procesarSiembraSocial() {
         const cantidad = parseFloat(document.getElementById('importe-siembra').value);
         const mensaje = document.getElementById('mensaje-siembra').value.trim();
 
-        if (isNaN(cantidad) || cantidad <= 0) {
-            escribirConsola("🔴 ERROR: Introduce una cantidad de tokens válida para sembrar.", "#ff6b6b");
-            return;
-        }
-        if (mensaje === "") {
-            escribirConsola("🔴 ERROR: El mensaje de esperanza no puede estar vacío.", "#ff6b6b");
-            return;
-        }
+        if (isNaN(cantidad) || cantidad <= 0 || mensaje === "") return;
 
-        escribirConsola("⏳ [Rust] Registrando pensamiento útil en la cadena de bloques...", "#aaffaa");
-
-        setTimeout(() => {
-            if (tokensPrivados >= cantidad) {
-                tokensPrivados -= cantidad;
-                aportacionSocial += cantidad;
-                actualizarPantallas();
-                escribirConsola(`🟢 SEMBRADO CON ÉXITO: Has aportado ${cantidad.toFixed(2)} TEU a la red social.`, "#6bff6b");
-                
-                // Añadir el mensaje al historial de la pantalla
-                agregarMensajeHistorial(mensaje, cantidad);
-            } else {
-                escribirConsola("🔴 ERROR: No tienes suficientes tokens TEU en tu bolsillo privado.", "#ff6b6b");
-            }
-        }, 500);
+        if (tokensPrivados >= cantidad) {
+            tokensPrivados -= cantidad;
+            aportacionSocial += cantidad;
+            actualizarPantallas();
+            escribirConsola(`🌱 SEMBRADO CON ÉXITO: Has aportado ${cantidad.toFixed(2)} TEU a la red.`, "#6bff6b");
+            
+            const tarjeta = document.createElement('div');
+            tarjeta.className = 'tarjeta-mensaje';
+            const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            tarjeta.innerHTML = `
+                <div class="mensaje-texto">"${mensaje}"</div>
+                <div class="mensaje-autor">ℹ️ Pensamiento • <b>Vicente (IMET-5800)</b> a las ${fechaActual}</div>
+            `;
+            tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
+        } else {
+            escribirConsola("🔴 ERROR: No tienes suficientes tokens TEU.", "#ff6b6b");
+        }
     }
 
-    // Funciones Auxiliares del Cuadro de Mandos
     function escribirConsola(texto, color) {
         consola.style.color = color;
         consola.innerHTML = texto;
@@ -222,18 +259,6 @@
     function actualizarPantallas() {
         pPrivada.innerText = tokensPrivados.toFixed(2);
         pSocial.innerText = aportacionSocial.toFixed(2);
-    }
-
-    function agregarMensajeHistorial(texto, cantidad) {
-        const tarjeta = document.createElement('div');
-        const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        tarjeta.className = 'tarjeta-mensaje';
-        tarjeta.innerHTML = `
-            <div class="mensaje-texto">"${texto}"</div>
-            <div class="mensaje-autor">✍️ Vicente • <b>+${cantidad.toFixed(2)} TEU</b> a las ${fechaActual}</div>
-        `;
-        // Insertamos el nuevo mensaje arriba del todo del historial
-        contenedorMensajes.insertBefore(tarjeta, contenedorMensajes.firstChild);
     }
 </script>
 
