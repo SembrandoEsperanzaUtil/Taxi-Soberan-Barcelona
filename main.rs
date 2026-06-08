@@ -1,15 +1,22 @@
-// PROYECTO: TAXI SOBERANO - BARCELONA AMB
+// PROYECTO: TAXI /SOBERANO - BARCELONA AMB
 // "Ayúdanos a regar la flor de la esperanza, desde nuestra humilde aportación"
 
 use std::collections::HashMap;
 use std::io::{self, Write}; // La herramienta para escuchar tu teclado
 
-#[derive(Debug)]
-struct NodoTaxi {
-    licencia: String,
-    ahorro_tokens: f64,
-    guardian_asignado: String, // ID del compañero de confianza
-    esta_bloqueado: bool,
+#[derive(Debug, Clone, PartialEq)]
+enum TipoAviso {
+    SosEmergencia,    // Alerta máxima (Auxilio en carretera)
+    AvisoParada,      // Información útil de la jornada (Festivales, tráfico...)
+}
+
+#[derive(Debug, Clone)]
+struct MensajeRed {
+    id_emisor: String,       // Carnet IMET del taxista que avisa
+    licencia_coche: String,  // Licencia vinculada para localizarlo
+    tipo: TipoAviso,
+    contenido: String,       // El texto del aviso ("¡Auxilio!", "Retención en Sónar"...)
+    hora_registro: String,   // Para saber cuándo se lanzó
 }
 
 impl NodoTaxi {
@@ -65,19 +72,45 @@ impl NodoTaxi {
 
 } // <--- ¡CUIDADO! Esta es la llave de cierre final de todo el "impl". No la borres.  
 
-
 fn main() {
-    println!("--- RED DE HONOR IMET/AMB: CONTROL POR CARNET INDIVIDUAL ---\n");
-    let mut red_amb = RedTaxiSoberano::new();
-
-    // Damos de alta a dos conductores para la MISMA licencia (Doble Turno)
-    red_amb.registrar_taxista(NodoTaxi {
-        carnet_imet: "IMET-64669".to_string(), // Tu carnet personalizado (nacido en el 58)
-        licencia_vinculada: "AMB-3931".to_string(), // Tu coche
+    println!("--- Iniciando Nodo de Honor: Taxi Barcelona ---\n");
+    
+    // 1. Creamos el Taxi de Vicente con 1000 tokens TEU privados y 0 aportados inicialmente
+    let mut taxi_vicente = NodoTaxi {
+        licencia: "AMB-1234".to_string(),
         tokens_privados: 1000.0,
         aportacion_social: 0.0,
+        guardian_asignado: "Jefe-Nodo-01".to_string(),
         esta_bloqueado: false,
-    });
+    };
+
+    println!("Estado inicial del taxi: {:?}", taxi_vicente);
+    println!("--------------------------------------------------");
+
+    // SIMULACIÓN 1: Vicente va al taller (Usa el escudo de doble firma)
+    println!("Simulando operación en taller (Vicente + Guardián)...");
+    match taxi_vicente.autorizar_gasto(250.0, true, true) {
+        Ok(mensaje) => println!("🟢 ÉXITO: {}", mensaje),
+        Err(error) => println!("🔴 ERROR: {}", error),
+    }
+    println!("Bolsillo privado de Vicente: {} TEU\n", taxi_vicente.tokens_privados);
+
+    // SIMULACIÓN 2: ¡Momento Solidario! Vicente decide sembrar tokens para ayuda social
+    println!("Simulando aportación voluntaria a la hucha comunitaria...");
+    let mensaje_vicente = "Para el comedor social del barrio, que a nadie le falte un plato.".to_string();
+    
+    match taxi_vicente.sembrar_token_util(150.0, mensaje_vicente) {
+        Ok(mensaje) => println!("{}", mensaje),
+        Err(error) => println!("{}", error),
+    }
+
+    println!("\n--------------------------------------------------");
+    println!("=== ESTADO FINAL DEL NODO ===");
+    println!("Licencia: {}", taxi_vicente.licencia);
+    println!("Bolsillo Privado: {} TEU", taxi_vicente.tokens_privados);
+    println!("Sembrado en Ayuda Social: {} TEU", taxi_vicente.aportacion_social);
+    println!("--------------------------------------------------");
+}
 
     red_amb.registrar_taxista(NodoTaxi {
         carnet_imet: "IMET-9999".to_string(), // Tu compañero del segundo turno
