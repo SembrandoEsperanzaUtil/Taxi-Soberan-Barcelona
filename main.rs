@@ -1,125 +1,113 @@
-// PROYECTO: TAXI SOBERANO - BARCELONA AMB (CONSENSO DE RED)
-use std::collections::HashMap;
+// PROYECTO: TAXI SOBERANO - BARCELONA AMB
+// "Ayúdanos a regar la flor de la esperanza, desde nuestra humilde aportación"
 
-#[derive(Debug, Clone)]
+use std::collections::HashMap;
+use std::io::{self, Write}; // La herramienta para escuchar tu teclado
+
+#[derive(Debug)]
 struct NodoTaxi {
     licencia: String,
-    tokens_privados: f64,
-    aportacion_social: f64,
+    ahorro_tokens: f64,
+    guardian_asignado: String, // ID del compañero de confianza
     esta_bloqueado: bool,
 }
 
-// NUEVA ESTRUCTURA: La Red que engloba a todos los taxis de la ciudad
-struct RedTaxiSoberano {
-    nodos: HashMap<String, NodoTaxi>,
-}
-
-impl RedTaxiSoberano {
-    fn new() -> Self {
-        RedTaxiSoberano { nodos: HashMap::new() }
-    }
-
-    // Registrar un nuevo compañero en la cadena de bloques
-    fn registrar_nodo(&mut self, taxi: NodoTaxi) {
-        self.nodos.insert(taxi.licencia.clone(), taxi);
-    }
-
-    // EL ESCUDO DE CONSENSO: Procesar un gasto requiriendo la firma de otro nodo vivo
-    fn procesar_gasto_con_consenso(
-        &mut self,
-        licencia_solicitante: &str,
-        licencia_guardian: &str,
-        importe: f64,
-        firma_solicitante: bool,
-        firma_guardian: bool,
+impl NodoTaxi {
+    // ========================================================
+    // PRIMERA PIEZA: LA FUNCIÓN DE AUTORIZAR GASTO (LA QUE YA TENÍAS)
+    // ========================================================
+    fn autorizar_gasto(
+        &mut self, 
+        importe: f64, 
+        firma_biometrica_propia: bool, 
+        firma_guardian: bool
     ) -> Result<String, String> {
         
-        // 1. Verificar si las dos firmas físicas se han presentado al revólver de seguridad
-        if !firma_solicitante || !firma_guardian {
-            // Si hay un intento de fraude, la red bloquea al nodo solicitante de inmediato
-            if let Some(taxi) = self.nodos.get_mut(licencia_solicitante) {
-                taxi.esta_bloqueado = true;
-            }
-            return Err(format!(
-                "🚨 ALERTA DE SEGURIDAD: Intento de movimiento sin doble firma. Nodo {} BLOQUEADO por la red.",
-                licencia_solicitante
-            ));
-        }
-
-        // 2. Comprobar si el Guardián existe realmente y está activo en Barcelona
-        if !self.nodos.contains_key(licencia_guardian) {
-            return Err(format!("🔴 RECHAZADO: El nodo guardián [{}] no existe en la red.", licencia_guardian));
-        }
-
-        // 3. Validar los fondos y aplicar el movimiento matemático
-        if let Some(taxi) = self.nodos.get_mut(licencia_solicitante) {
-            if taxi.esta_bloqueado {
-                return Err("🔴 RECHAZADO: Este nodo está bloqueado y sus fondos están congelados.".to_string());
-            }
-            if taxi.tokens_privados >= importe {
-                taxi.tokens_privados -= importe;
-                Ok(format!(
-                    "🟢 CONSENSO LOGRADO: Nodo [{}] autoriza {} TEU. Validado por el Guardián [{}].",
-                    licencia_solicitante, importe, licencia_guardian
-                ))
+        // El escudo contra "bandidos" remotos
+        if firma_biometrica_propia && firma_guardian {
+            if self.tokens_privados >= importe { // <--- Recuerda cambiar aquí "ahorro_tokens" por "tokens_privados"
+                self.invertir_en_gasto(importe);
+                Ok(format!("Pago de {} tokens autorizado con éxito. La unión hace la fuerza.", importe))
             } else {
-                Err("🔴 RECHAZADO: Fondos insuficientes en el monedero.".to_string())
+                Err("Fondos insuficientes en el Token de la Esperanza.".to_string())
             }
         } else {
-            Err("🔴 RECHAZADO: El nodo solicitante no está registrado.".to_string())
+            Err("ALERTA: Intento de acceso sin doble validación física. Bloqueando fondos.".to_string())
         }
     }
-}
+
+    // Función auxiliar para restar los tokens de forma segura
+    fn invertir_en_gasto(&mut self, importe: f64) {
+        self.tokens_privados -= importe; // <--- Recuerda cambiar aquí también "ahorro_tokens" por "tokens_privados"
+    }
+
+
+    // ========================================================
+    // SEGUNDA PIEZA: AQUÍ ENCAJAMOS LA NUEVA FUNCIÓN DEL TOKEN TEU
+    // (Justo antes de que se cierre la llave grande del "impl")
+    // ========================================================
+    fn sembrar_token_util(&mut self, cantidad: f64, mensaje_esperanza: String) -> Result<String, String> {
+        if self.esta_bloqueado {
+            return Err("Operación denegada: Este nodo está bloqueado por seguridad.".to_string());
+        }
+
+        if self.tokens_privados >= cantidad {
+            self.tokens_privados -= cantidad;
+            self.aportacion_social += cantidad;
+            Ok(format!(
+                "🟢 SEMBRADO CON ÉXITO: Has aportado {} TEU a la red social. Mensaje grabado: '{}'", 
+                cantidad, mensaje_esperanza
+            ))
+        } else {
+            Err("🔴 ERROR: No tienes suficientes tokens TEU en tu bolsillo privado.".to_string())
+        }
+    }
+
+} // <--- ¡CUIDADO! Esta es la llave de cierre final de todo el "impl". No la borres.  
+
 
 fn main() {
-    println!("--- CONFIGURANDO RED DE HONOR: TAXI BARCELONA ---\n");
+    println!("--- RED DE HONOR IMET/AMB: CONTROL POR CARNET INDIVIDUAL ---\n");
     let mut red_amb = RedTaxiSoberano::new();
 
-    // REGISTRO DE NODOS: Colocamos los tres pilares de acero en la ciudad
-    red_amb.registrar_nodo(NodoTaxi {
-        licencia: "TAXI-VICENTE".to_string(),
+    // Damos de alta a dos conductores para la MISMA licencia (Doble Turno)
+    red_amb.registrar_taxista(NodoTaxi {
+        carnet_imet: "IMET-64669".to_string(), // Tu carnet personalizado (nacido en el 58)
+        licencia_vinculada: "AMB-3931".to_string(), // Tu coche
         tokens_privados: 1000.0,
         aportacion_social: 0.0,
         esta_bloqueado: false,
     });
 
-    red_amb.registrar_nodo(NodoTaxi {
-        licencia: "TAXI-JEFE".to_string(), // El Guardián de confianza
-        tokens_privados: 2500.0,
-        aportacion_social: 500.0,
+    red_amb.registrar_taxista(NodoTaxi {
+        carnet_imet: "IMET-9999".to_string(), // Tu compañero del segundo turno
+        licencia_vinculada: "AMB-3931".to_string(), // ¡El mismo coche!
+        tokens_privados: 500.0,
+        aportacion_social: 20.0,
         esta_bloqueado: false,
     });
 
-    red_amb.registrar_nodo(NodoTaxi {
-        licencia: "TAXI-ANDRES".to_string(), // Otro compañero de la parada
-        tokens_privados: 800.0,
-        aportacion_social: 50.0,
+    // El carnet de tu Jefe (El Guardián Principal de la parada)
+    red_amb.registrar_taxista(NodoTaxi {
+        carnet_imet: "IMET-0001".to_string(),
+        licencia_vinculada: "AMB-3931".to_string(),
+        tokens_privados: 3000.0,
+        aportacion_social: 600.0,
         esta_bloqueado: false,
     });
 
-    // Imprimir el censo inicial para verificar que la red ve a los tres
-    println!("Nodos activos en la red: {} taxis vigilando.", red_amb.nodos.len());
+    println!("Censo IMET activo: {} conductores validados en la red.", red_amb.nodos.len());
     println!("--------------------------------------------------");
 
-    // PRUEBA 1: Vicente va al taller y el Jefe le firma digitalmente al lado
-    println!("Escenario 1: Vicente solicita 300 TEU para el taller. El Jefe firma.");
-    match red_amb.procesar_gasto_con_consenso("TAXI-VICENTE", "TAXI-JEFE", 300.0, true, true) {
-        Ok(msg) => println!("{}", msg),
-        Err(err) => println!("{}", err),
-    }
-    println!("Tokens restantes de Vicente: {} TEU\n", red_amb.nodos.get("TAXI-VICENTE").unwrap().tokens_privados);
-
-    // PRUEBA 2: Un "intruso" intenta retirar fondos simulando la firma de Vicente pero SIN la firma del Jefe
-    println!("Escenario 2: Intento de hackeo. Retirar 100 TEU sin la firma del Jefe...");
-    match red_amb.procesar_gasto_con_consenso("TAXI-VICENTE", "TAXI-JEFE", 100.0, true, false) {
+    // PRUEBA: Tú solicitas un gasto con tu carnet personal y el jefe da el visto bueno
+    println!("Vicente (Carnet: IMET-5800) solicita 200 TEU en el taller de guardia.");
+    match red_amb.procesar_gasto_con_consenso("IMET-5800", "IMET-0001", 200.0, true, true) {
         Ok(msg) => println!("{}", msg),
         Err(err) => println!("{}", err),
     }
 
-    // PRUEBA 3: Comprobar si el escudo de la red ha bloqueado el taxi de Vicente por seguridad
-    println!("\nEscenario 3: Intentando operar tras el ataque...");
-    match red_amb.procesar_gasto_con_consenso("TAXI-VICENTE", "TAXI-JEFE", 50.0, true, true) {
-        Ok(msg) => println!("{}", msg),
-        Err(err) => println!("{}", err),
-    }
+    println!("\nComprobación de saldos del coche AMB-1234:");
+    println!("-> Turno Vicente (IMET-5800): {} TEU", red_amb.nodos.get("IMET-5800").unwrap().tokens_privados);
+    println!("-> Turno Compañero (IMET-9999): {} TEU", red_amb.nodos.get("IMET-9999").unwrap().tokens_privados);
+    println!("--------------------------------------------------");
 }
