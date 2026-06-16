@@ -2,20 +2,15 @@
 // "Barcelona, això és TEU! Món, això és TEU!"
 
 use std::collections::HashMap;
-use wasm_bindgen::prelude::*; // 🔌 El puente de acero que conecta Rust con el móvil móvil (WebAssembly)
+use wasm_bindgen::prelude::*; // 🔌 El puente de acero que conecta Rust con el móvil (WebAssembly)
 
 #[wasm_bindgen]
 #[derive(Debug, Clone, PartialEq)]
-enum TipoAviso {
-    SosEmergencia,
-    AvisoParada,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-enum TipoAviso {
+pub enum TipoAviso {
     SosEmergencia,    // Alerta máxima (Auxilio en carretera)
     AvisoParada,      // Información útil de la jornada (Festivales, tráfico...)
 }
+
 #[wasm_bindgen]
 #[derive(Debug, Clone)]
 pub struct MensajeRed {
@@ -34,6 +29,7 @@ pub struct NodoTaxi {
     tokens_privados: f64,
     aportacion_social: f64,
     esta_bloqueado: bool,
+    votos_censura: u32, // 🗳️ Cuenta cuántos compañeros han votado su expulsión
 }
 
 #[derive(Debug, Clone)]
@@ -64,6 +60,46 @@ impl RedTaxiSoberano {
         }
     }
 
+    // PROTOCOLO DE DEFENSA: Voto comunitario para suspender a un infractor
+    pub fn votar_censura_comunitaria(&mut self, carnet_infractor: &str, carnet_votante: &str) -> String {
+        // 1. Evitar que alguien se vote a sí mismo
+        if carnet_infractor == carnet_votante {
+            return "🔴 RECHAZADO: No puedes votar contra ti mismo.".to_string();
+        }
+
+        // 2. Comprobar que el votante existe y está activo
+        if !self.nodos.contains_key(carnet_votante) {
+            return "🔴 RECHAZADO: El votante no es un miembro activo de la red.".to_string();
+        }
+
+        // 3. Procesar el voto sobre el infractor
+        if let Some(taxista_acusado) = self.nodos.get_mut(carnet_infractor) {
+            if taxista_acusado.esta_bloqueado {
+                return "ℹ️ El nodo ya se encuentra suspendido y congelado.".to_string();
+            }
+
+            // Sumamos un voto de la parada
+            taxista_acusado.votos_censura += 1;
+            let votos_actuales = taxista_acusado.votos_censura;
+
+            // REGLA SAGRADA: A los 3 votos, ¡EXPULSIÓN AUTOMÁTICA!
+            if votos_actuales >= 3 {
+                taxista_acusado.esta_bloqueado = true;
+                format!(
+                    "🚨 !!! SENTENCIA COMUNITARIA !!! El carnet [{}] ha recibido {} votos. QUÓRUM LOGRADO. Nodo BLOQUEADO y fondos congelados.",
+                    carnet_infractor, votos_actuales
+                )
+            } else {
+                format!(
+                    "🗳️ Voto registrado. El carnet [{}] lleva {}/3 votos de censura. La comunidad está vigilando.",
+                    carnet_infractor, votos_actuales
+                )
+            }
+        } else {
+            "🔴 ERROR: El carnet denunciado no existe en el censo.".to_string()
+        }
+    }  
+
     // Registrar los conductores fundadores desde la web
     pub fn registrar_taxista(&mut self, carnet: String, licencia: String, tokens: f64) {
         let taxi = NodoTaxi {
@@ -72,6 +108,7 @@ impl RedTaxiSoberano {
             tokens_privados: tokens,
             aportacion_social: 0.0,
             esta_bloqueado: false,
+            votos_censura: 0,
         };
         self.nodos.insert(carnet, taxi);
     }
@@ -105,6 +142,7 @@ impl RedTaxiSoberano {
                     tokens_privados: 500.0, // Carga inicial de confianza útil
                     aportacion_social: 0.0,
                     esta_bloqueado: false,
+                    votos_censura: 0, // Inicia limpio de penalizaciones
                 };
                 self.nodos.insert(nuevo_nodo.carnet_imet.clone(), nuevo_nodo);
                 self.solicitudes_pendientes.remove(carnet_aspirante);
@@ -166,4 +204,4 @@ impl RedTaxiSoberano {
             "🔴 ERROR: Emisor no identificado.".to_string()
         }
     }
-} // <--- ¡Esta es la ultimísima llave de todo tu archivo!
+}
