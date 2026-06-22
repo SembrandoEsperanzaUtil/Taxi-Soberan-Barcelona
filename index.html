@@ -13,6 +13,8 @@
             --texto-claro: #f5f5f5;
             --verde-exito: #2ecc71;
             --rojo-sos: #e74c3c;
+            --azul-protocolo: #3498db;
+            --naranja-alerta: #e67e22;
         }
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
@@ -42,15 +44,10 @@
         #pantalla-privada { color: var(--taxi-amarillo); }
         #pantalla-social { color: var(--oro-honor); }
 
-        /* Botón de Emergencia SOS Máxima */
+        /* Alerta SOS */
         .zona-sos { background: rgba(231, 76, 60, 0.05); border: 3px dashed var(--rojo-sos); border-radius: 20px; padding: 20px; margin: 20px 0; text-align: center; }
-        .btn-sos { background: var(--rojo-sos); color: white; animation: pulso 2deg infinite alternate; font-size: 1.2em; box-shadow: 0 0 15px rgba(231, 76, 60, 0.4); }
+        .btn-sos { background: var(--rojo-sos); color: white; font-size: 1.2em; box-shadow: 0 0 15px rgba(231, 76, 60, 0.4); cursor: pointer; }
         .btn-sos:hover { background: white; color: var(--rojo-sos); }
-
-        @keyframes pulso {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(231, 76, 60, 0.4); }
-            100% { transform: scale(1.02); box-shadow: 0 0 25px rgba(231, 76, 60, 0.8); }
-        }
 
         /* Secciones de Trabajo */
         .zona-interactiva { background: rgba(255,255,255,0.01); border: 1px solid #2d2d2d; border-radius: 20px; padding: 20px; margin-top: 20px; text-align: left; }
@@ -59,7 +56,6 @@
         .campo { margin-bottom: 15px; }
         label { display: block; font-size: 0.85em; color: #bbb; margin-bottom: 6px; font-weight: 500; }
         input[type="number"], input[type="text"] { width: 100%; padding: 12px; background: #121212; border: 1px solid #444; border-radius: 10px; color: white; font-size: 1em; box-sizing: border-box; }
-        input[type="text"] { font-style: italic; }
         
         .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 8px; background: #161616; padding: 12px; border-radius: 10px; border: 1px solid #282828; }
         input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--taxi-amarillo); }
@@ -70,20 +66,16 @@
         .btn-amarillo:hover { background: white; }
         .btn-oro { background: var(--oro-honor); color: white; }
         .btn-oro:hover { background: white; color: black; }
+        .btn-azul { background: var(--azul-protocolo); color: white; }
+        .btn-azul:hover { background: white; color: var(--azul-protocolo); }
+        .btn-naranja { background: var(--naranja-alerta); color: white; }
+        .btn-naranja:hover { background: white; color: var(--naranja-alerta); }
+        
+        .btn-mitad { width: 48%; display: inline-block; font-size: 0.9em; padding: 10px; }
 
-        /* Consola de Estado */
-        .consola-status { background: #000; border-left: 4px solid var(--taxi-amarillo); padding: 15px; border-radius: 10px; margin-top: 20px; font-family: monospace; font-size: 0.85em; text-align: left; color: #aaffaa; min-height: 40px; line-height: 1.4; word-break: break-word; }
-
-        /* Historial / Tablón Común */
-        .historial-seccion { margin-top: 25px; text-align: left; }
-        .historial-titulo { font-size: 0.9em; color: var(--taxi-amarillo); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .tarjeta-mensaje { background: #1a1a1a; padding: 12px; border-radius: 10px; border-left: 4px solid var(--oro-honor); margin-bottom: 10px; font-size: 0.9em; }
-        .tarjeta-mensaje.sos { border-left: 4px solid var(--rojo-sos); background: #241414; }
-        .mensaje-texto { font-style: italic; color: #eee; margin-bottom: 4px; }
-        .mensaje-autor { font-size: 0.8em; color: #888; text-align: right; }
-
-        .pie-pagina { margin-top: 30px; font-size: 0.75em; color: #444; letter-spacing: 0.5px; }
-        /* Animación para el parpadeo de alerta máxima */
+        /* Consola de Estado y Animación de Parpadeo */
+        .consola-status { background: #000; border-left: 4px solid var(--taxi-amarillo); padding: 15px; border-radius: 10px; margin-top: 20px; font-family: monospace; font-size: 0.85em; text-align: left; color: #aaffaa; min-height: 40px; line-height: 1.4; word-break: break-word; transition: 0.3s; }
+        
         @keyframes parpadeoRojo {
             0% { background-color: #000; border-left-color: var(--rojo-sos); }
             50% { background-color: #4a1414; border-left-color: #ff0000; box-shadow: 0 0 15px rgba(231,76,60,0.6); }
@@ -94,6 +86,18 @@
             color: #ff8b8b !important;
             font-weight: bold;
         }
+
+        /* Historial / Tablón */
+        .historial-seccion { margin-top: 25px; text-align: left; }
+        .historial-titulo { font-size: 0.9em; color: var(--taxi-amarillo); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .tarjeta-mensaje { background: #1a1a1a; padding: 12px; border-radius: 10px; border-left: 4px solid var(--oro-honor); margin-bottom: 10px; font-size: 0.9em; }
+        .tarjeta-mensaje.sos { border-left: 4px solid var(--rojo-sos); background: #241414; }
+        .tarjeta-mensaje.alta { border-left: 4px solid var(--verde-exito); background: #142414; }
+        .tarjeta-mensaje.censura { border-left: 4px solid var(--naranja-alerta); background: #241c14; }
+        .mensaje-texto { font-style: italic; color: #eee; margin-bottom: 4px; }
+        .mensaje-author { font-size: 0.8em; color: #888; text-align: right; }
+
+        .pie-pagina { margin-top: 30px; font-size: 0.75em; color: #444; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
@@ -103,15 +107,15 @@
     <span class="subtitulo">Red de Honor - Barcelona</span>
     
     <div class="frase">
-        "Los pensamientos, los dejamos sembrados cada día, como las flores, como la fruta, como el amor por el prójimo. Sin esos pensamientos, las personas no seríamos personas."
+        "Barcelona, això és TEU! Món, eso es TUYO!"
     </div>
 
     <!-- IDENTIFICACIÓN DEL TURNO ACTUAL -->
     <div style="font-size: 0.85em; color: #aaa; margin-bottom: 10px; background: #161616; padding: 8px; border-radius: 10px;">
-        👤 Conductor: <b>Vicente (IMET-5800)</b> | 🚖 Licencia: <b>AMB-1234</b>
+        👤 Operando: <b>Vicente (IMET-5800)</b> | 🛡️ Rol: <b>Enlace de Parada</b>
     </div>
 
-    <!-- DOBLE BILLETERA DIGITAL -->
+    <!-- DOUBLE BILLETERA DIGITAL -->
     <div class="billeteras-grid">
         <div class="hucha-box privada">
             <div class="hucha-titulo">💰 BOLSILLO PRIVADO</div>
@@ -125,21 +129,57 @@
         </div>
     </div>
 
-    <!-- ¡NUEVA SECCIÓN!: BOTÓN DE EMERGENCIA SOS MULTIDIFUSIÓN -->
+    <!-- BOTÓN DE EMERGENCIA SOS MÁXIMA -->
     <div class="zona-sos">
-        <div style="font-size: 0.85em; color: var(--rojo-sos); font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🚨 Red de Auxilio Mutuo AMB</div>
         <button class="btn-accion btn-sos" onclick="dispararAlertaSOS()">⚠️ PULSAR SOS EN CARRETERA</button>
     </div>
 
-    <!-- VENTANILLA 1: EL MOTOR DE GASTOS (CON DOBLE FIRMA) -->
+    <!-- VENTANILLA 1: PROTOCOLO DE INGRESO -->
+    <div class="zona-interactiva" style="border-color: var(--azul-protocolo);">
+        <h2 style="color: var(--azul-protocolo);">📝 Registro de Nuevos Nodos (Ciclo de Apertura)</h2>
+        <div id="bloque-registro-nuevo">
+            <div class="campo">
+                <label for="nuevo-carnet">Número de Carnet IMET del Aspirante:</label>
+                <input type="text" id="nuevo-carnet" value="IMET-7777" placeholder="Ej: IMET-7777">
+            </div>
+            <div class="campo">
+                <label for="nueva-licencia">Licencia AMB Vinculada:</label>
+                <input type="text" id="nueva-licencia" value="AMB-5555" placeholder="Ej: AMB-5555">
+            </div>
+            <button class="btn-accion btn-azul" onclick="solicitarIngreso()">Presentar Solicitud a la Parada</button>
+        </div>
+
+        <div id="bloque-avales" style="display:none; margin-top: 15px; background: #161616; padding: 15px; border-radius: 12px; border: 1px solid #333;">
+            <p style="margin: 0 0 10px 0; font-size: 0.9em; color: #ccc;">🛠️ <b>Firma del Ciclo Requerida:</b></p>
+            <div style="display: flex; justify-content: space-between;">
+                <button id="btn-aval-vicente" class="btn-accion btn-oro btn-mitad" onclick="firmarAval('Vicente')">✍️ Firmar Vicente</button>
+                <button id="btn-aval-jefe" class="btn-accion btn-amarillo btn-mitad" onclick="firmarAval('Jefe')">🛡️ Firmar Jefe</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VENTANILLA 2: PROTOCOLO DE DEFENSA -->
+    <div class="zona-interactiva" style="border-color: var(--naranja-alerta);">
+        <h2 style="color: var(--naranja-alerta);">🗳️ Defensa de la Parada (Voto de Censura)</h2>
+        <div class="campo">
+            <label for="carnet-infractor">Carnet IMET bajo sospecha o mala praxis:</label>
+            <input type="text" id="carnet-infractor" value="IMET-9999" placeholder="Ej: IMET-9999">
+        </div>
+        <div class="campo">
+            <label for="votante-parada">Tu Carnet emisor del voto:</label>
+            <input type="text" id="votante-parada" value="IMET-5800" placeholder="Tu carnet activo">
+        </div>
+        <button class="btn-accion btn-naranja" onclick="ejecutarVotoCensura()">Emitir Voto de Censura</button>
+    </div>
+
+    <!-- VENTANILLA 3: GASTOS TALLER -->
     <div class="zona-interactiva">
         <h2>🛠️ Ventanilla de Gasto (Consenso Presencial)</h2>
         <div class="campo">
-            <label for="importe-gasto">Importe a retirar (Talleres / Combustible):</label>
+            <label for="importe-gasto">Importe a retirar (Taller / Combustible):</label>
             <input type="number" id="importe-gasto" value="250" min="1">
         </div>
         <div class="campo">
-            <label>Validación Física Simultánea:</label>
             <div class="checkbox-group">
                 <input type="checkbox" id="firma-vicente" checked>
                 <label style="margin:0; cursor:pointer;" for="firma-vicente">🔑 Mi Firma de Carnet (IMET-5800)</label>
@@ -152,7 +192,7 @@
         <button class="btn-accion btn-amarillo" onclick="procesarGastoTaller()">🚕 Autorizar Pago</button>
     </div>
 
-    <!-- VENTANILLA 2: LA SIEMBRA SOCIAL -->
+    <!-- VENTANILLA 4: SIEMBRA SOCIAL -->
     <div class="zona-interactiva" style="border-color: var(--oro-honor);">
         <h2 style="color: var(--oro-honor);">🌱 Sembrar Pensamiento Útil</h2>
         <div class="campo">
@@ -160,23 +200,21 @@
             <input type="number" id="importe-siembra" value="150" min="1">
         </div>
         <div class="campo">
-            <label for="mensaje-siembra">Mensaje de Esperanza para registrar en la red:</label>
+            <label for="mensaje-siembra">Mensaje de Esperanza:</label>
             <input type="text" id="mensaje-siembra" value="Para el comedor social del barrio, que a nadie le falte un plato.">
         </div>
         <button class="btn-accion btn-oro" onclick="procesarSiembraSocial()">🌾 Sembrar en la Comunidad</button>
     </div>
 
-    <!-- CONSOLA DE ESTADO (SIMULADOR TERMINAL RUST) -->
+    <!-- CONSOLA DE ESTADO -->
     <div id="consola" class="consola-status">
-        [Sistema] Red de Honor IMET activa. Nodos enlazados y vigilando la ciudad...
+        [Sistema] Red de Honor IMET activa. Todos los escudos de defensa cargados en memoria...
     </div>
 
-    <!-- NUEVO: TABLÓN DIGITAL EN VIVO -->
+    <!-- TABLÓN DIGITAL -->
     <div class="historial-seccion">
         <div class="historial-titulo">📱 TABLÓN DIGITAL DE LA PARADA (AMB)</div>
-        <div id="tablon-comun">
-            <!-- Los avisos ordinarios y de SOS aparecerán aquí en orden -->
-        </div>
+        <div id="tablon-comun"></div>
     </div>
     
     <div class="pie-pagina">
@@ -188,79 +226,193 @@
     let tokensPrivados = 1000.0;
     let aportacionSocial = 0.0;
 
+    // Base de datos de simulación local
+    let solicitudActiva = null;
+    let censoVotosCensura = { "IMET-9999": 0 };
+    let nodosBloqueados = {};
+
     const consola = document.getElementById('consola');
     const pPrivada = document.getElementById('pantalla-privada');
     const pSocial = document.getElementById('pantalla-social');
     const tablonComun = document.getElementById('tablon-comun');
+    const bloqueAvales = document.getElementById('bloque-avales');
 
-    // FUNCIÓN NUEVA: El Botón de SOS Multidifusión
-    function dispararAlertaSOS() {
-        escribirConsola("⏳ [Rust] ¡Multidifundiendo señal de auxilio a los nodos IMET de la zona!", "#ff6b6b");
-        
-        setTimeout(() => {
-            const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            escribirConsola(`🚨 !!! SOS MULTIDIFUSIÓN !!! Conductor [IMET-5800] (Licencia AMB-1234) SOLICITA AUXILIO.`, "#ff4444");
+    // 1. PROTOCOLO DE VOTO DE CENSURA (CON EFECTO PARPADEO)
+    function ejecutarVotoCensura() {
+        // Limpiamos la alerta máxima al iniciar una nueva acción
+        consola.classList.remove('alerta-maxima');
+
+        const infractor = document.getElementById('carnet-infractor').value.trim();
+        const votante = document.getElementById('votante-parada').value.trim();
+
+        if (infractor === "" || votante === "") {
+            escribirConsola("🔴 ERROR: Rellena los datos de la votación.", "#ff6b6b");
+            return;
+        }
+
+        if (infractor === votante) {
+            escribirConsola("🔴 RECHAZADO: Un nodo no puede votar en su propia contra.", "#ff6b6b");
+            return;
+        }
+
+        if (nodosBloqueados[infractor]) {
+            escribirConsola(`ℹ️ El nodo [${infractor}] ya ha sido suspendido y congelado anteriormente.`, "#e67e22");
+            // Mantenemos el parpadeo si ya está bloqueado
+            consola.classList.add('alerta-maxima');
+            return;
+        }
+
+        if (!censoVotosCensura[infractor]) {
+            censoVotosCensura[infractor] = 0;
+        }
+
+        censoVotosCensura[infractor] += 1;
+        let votosActuales = censoVotosCensura[infractor];
+        const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        if (votosActuales >= 3) {
+            nodosBloqueados[infractor] = true;
+            escribirConsola(`🚨 SENTENCIA COMUNITARIA: El carnet [${infractor}] alcanzó los 3 votos. ¡BLOQUEADO!`, "#ff4444");
             
-            // Creamos la tarjeta roja de SOS para el tablón
+            // 🔥 ACTIVAMOS EL PARPADEO ROJO DE ALERTA MÁXIMA
+            consola.classList.add('alerta-maxima');
+            
             const tarjeta = document.createElement('div');
             tarjeta.className = 'tarjeta-mensaje sos';
             tarjeta.innerHTML = `
-                <div class="mensaje-texto" style="color: #ff8b8b; font-weight: bold;">⚠️ "¡Alerta en carretera! Necesito compañeros cerca de mi posición actual."</div>
-                <div class="mensaje-autor" style="color: #ffaaaa;">🚨 Emergencia • <b>Vicente (AMB-1234)</b> a las ${fechaActual}</div>
+                <div class="mensaje-texto" style="color: #ff8b8b; font-weight: bold;">🚨 "ATENCIÓN PARADA: El nodo ${infractor} ha violado las normas de la comunidad. Expulsado de la red por decisión democrática."</div>
+                <div class="mensaje-author">🔴 EXPULSIÓN RED • <b>Quórum Logrado (3/3)</b> a las ${fechaActual}</div>
             `;
             tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
-        }, 400);
+        } else {
+            escribirConsola(`🗳️ Voto registrado con éxito. El carnet [${infractor}] acumula ${votosActuales}/3 votos de censura.`, "#e67e22");
+            
+            const tarjeta = document.createElement('div');
+            tarjeta.className = 'tarjeta-mensaje censura';
+            tarjeta.innerHTML = `
+                <div class="mensaje-texto">"Denuncia interpuesta contra el conductor del carnet ${infractor}. Vigilancia activada."</div>
+                <div class="mensaje-author">🗳️ VOTO EMITIDO • Por <b>${votante}</b> a las ${fechaActual} (${votosActuales}/3)</div>
+            `;
+            tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
+        }
     }
 
-    // Gasto taller por consenso
+    // 2. SOLICITAR INGRESO NUEVO COMPAÑERO
+    function solicitarIngreso() {
+        consola.classList.remove('alerta-maxima');
+        const carnet = document.getElementById('nuevo-carnet').value.trim();
+        const licencia = document.getElementById('nueva-licencia').value.trim();
+
+        if(carnet === "" || licencia === "") {
+            escribirConsola("🔴 ERROR: Debes rellenar los datos del aspirante.", "#ff6b6b");
+            return;
+        }
+
+        solicitudActiva = { carnet: carnet, licencia: licencia, vicente: false, jefe: false };
+        escribirConsola(`📝 PROTOCOLO: Solicitud registrada para ${carnet}. Esperando firmas del Ciclo de Apertura...`, "#3498db");
+        bloqueAvales.style.display = "block";
+        resetearBotonesAval();
+    }
+
+    function firmarAval(quien) {
+        if(!solicitudActiva) return;
+
+        if (quien === 'Vicente') {
+            solicitudActiva.vicente = true;
+            document.getElementById('btn-aval-vicente').style.background = "#2ecc71";
+            document.getElementById('btn-aval-vicente').innerText = "✅ Vicente Firmó";
+            escribirConsola(`✍️ Vicente ha avalado al compañero ${solicitudActiva.carnet} en la acera.`, "#d4af37");
+        } else if (quien === 'Jefe') {
+            solicitudActiva.jefe = true;
+            document.getElementById('btn-aval-jefe').style.background = "#2ecc71";
+            document.getElementById('btn-aval-jefe').innerText = "✅ Jefe Firmó";
+            escribirConsola(`🛡️ El Jefe-Guardián validó credenciales IMET para ${solicitudActiva.carnet}.`, "#f1c40f");
+        }
+
+        if (solicitudActiva.vicente && solicitudActiva.jefe) {
+            setTimeout(() => {
+                escribirConsola(`🟢 ¡CICLO DE APERTURA COMPLETADO! Nodo [${solicitudActiva.carnet}] dado de alta oficial.`, "#6bff6b");
+                
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'tarjeta-mensaje alta';
+                const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                tarjeta.innerHTML = `
+                    <div class="mensaje-texto" style="color: #8bff8b; font-weight: bold;">🤝 "¡Nuevo compañero incorporado con éxito! Se le asignan 500 TEU de confianza útil."</div>
+                    <div class="mensaje-author">🟢 ALTA RED • <b>${solicitudActiva.carnet} (${solicitudActiva.licencia})</b> a las ${fechaActual}</div>
+                `;
+                tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
+                
+                bloqueAvales.style.display = "none";
+                document.getElementById('nuevo-carnet').value = "";
+                document.getElementById('nueva-licencia').value = "";
+                solicitudActiva = null;
+            }, 800);
+        }
+    }
+
+    function resetearBotonesAval() {
+        document.getElementById('btn-aval-vicente').style.background = "var(--oro-honor)";
+        document.getElementById('btn-aval-vicente').innerText = "✍️ Firmar Vicente";
+        document.getElementById('btn-aval-jefe').style.background = "var(--taxi-amarillo)";
+        document.getElementById('btn-aval-jefe').innerText = "🛡️ Firmar Jefe";
+    }
+
+    function disparoAlertaSOS() { /* Mantener compatibilidad */ dispararAlertaSOS(); }
+
+    function dispararAlertaSOS() {
+        consola.classList.remove('alerta-maxima');
+        const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        escribirConsola(`🚨 !!! SOS MULTIDIFUSIÓN !!! Conductor [IMET-5800] solicita auxilio.`, "#ff4444");
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'tarjeta-mensaje sos';
+        tarjeta.innerHTML = `
+            <div class="mensaje-texto" style="color: #ff8b8b; font-weight: bold;">⚠️ "¡Alerta en carretera! Necesito compañeros cerca de mi posición."</div>
+            <div class="mensaje-author" style="color: #ffaaaa;">🚨 Emergencia • <b>Vicente (AMB-1234)</b> a las ${fechaActual}</div>
+        `;
+        tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
+    }
+
     function procesarGastoTaller() {
+        consola.classList.remove('alerta-maxima');
         const importe = parseFloat(document.getElementById('importe-gasto').value);
         const firmaVicente = document.getElementById('firma-vicente').checked;
         const firmaGuardian = document.getElementById('firma-guardian').checked;
-
-        if (isNaN(importe) || importe <= 0) {
-            escribirConsola("🔴 ERROR: Importe inválido.", "#ff6b6b");
-            return;
-        }
 
         if (firmaVicente && firmaGuardian) {
             if (tokensPrivados >= importe) {
                 tokensPrivados -= importe;
                 actualizarPantallas();
-                escribirConsola(`🟢 CONSENSO: Taxista [IMET-5800] (Licencia AMB-1234) autorizó ${importe.toFixed(2)} TEU.`, "#6bff6b");
+                escribirConsola(`🟢 CONSENSO: Gasto de ${importe.toFixed(2)} TEU autorizado por el Guardián.`, "#6bff6b");
             } else {
                 escribirConsola("🔴 RECHAZADO: Fondos insuficientes.", "#ff6b6b");
             }
         } else {
-            escribirConsola("🚨 ALERTA: Intento de fraude. E// Activamos el parpadeo rojo en la consola
-            consola.classList.add('alerta-maxima');l carnet IMET [IMET-5800] ha sido BLOQUEADO.", "#ff4444");
-
+            escribirConsola("🚨 FRAUDE DETECTADO: El carnet [IMET-5800] ha sido BLOQUEADO.", "#ff4444");
+            consola.classList.add('alerta-maxima');
         }
     }
 
-    // Siembra Social útil
     function procesarSiembraSocial() {
+        consola.classList.remove('alerta-maxima');
         const cantidad = parseFloat(document.getElementById('importe-siembra').value);
         const mensaje = document.getElementById('mensaje-siembra').value.trim();
 
-        if (isNaN(cantidad) || cantidad <= 0 || mensaje === "") return;
-
-        if (tokensPrivados >= cantidad) {
+        if (tokensPrivados >= cantidad && mensaje !== "") {
             tokensPrivados -= cantidad;
             aportacionSocial += cantidad;
             actualizarPantallas();
-            escribirConsola(`🌱 SEMBRADO CON ÉXITO: Has aportado ${cantidad.toFixed(2)} TEU a la red.`, "#6bff6b");
+            escribirConsola(`🌱 SEMBRADO CON ÉXITO: Aportados ${cantidad.toFixed(2)} TEU a la red.`, "#6bff6b");
             
             const tarjeta = document.createElement('div');
             tarjeta.className = 'tarjeta-mensaje';
             const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             tarjeta.innerHTML = `
                 <div class="mensaje-texto">"${mensaje}"</div>
-                <div class="mensaje-autor">ℹ️ Pensamiento • <b>Vicente (IMET-5800)</b> a las ${fechaActual}</div>
+                <div class="mensaje-author">ℹ️ Pensamiento • <b>Vicente (IMET-5800)</b> a las ${fechaActual}</div>
             `;
             tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
         } else {
-            escribirConsola("🔴 ERROR: No tienes suficientes tokens TEU.", "#ff6b6b");
+            escribirConsola("🔴 ERROR: No se puede procesar la siembra.", "#ff6b6b");
         }
     }
 
