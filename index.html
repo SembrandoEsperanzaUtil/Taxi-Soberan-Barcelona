@@ -14,6 +14,7 @@
             --verde-exito: #2ecc71;
             --rojo-sos: #e74c3c;
             --azul-protocolo: #3498db;
+            --naranja-alerta: #e67e22;
         }
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
@@ -67,6 +68,8 @@
         .btn-oro:hover { background: white; color: black; }
         .btn-azul { background: var(--azul-protocolo); color: white; }
         .btn-azul:hover { background: white; color: var(--azul-protocolo); }
+        .btn-naranja { background: var(--naranja-alerta); color: white; }
+        .btn-naranja:hover { background: white; color: var(--naranja-alerta); }
         
         .btn-mitad { width: 48%; display: inline-block; font-size: 0.9em; padding: 10px; }
 
@@ -79,8 +82,9 @@
         .tarjeta-mensaje { background: #1a1a1a; padding: 12px; border-radius: 10px; border-left: 4px solid var(--oro-honor); margin-bottom: 10px; font-size: 0.9em; }
         .tarjeta-mensaje.sos { border-left: 4px solid var(--rojo-sos); background: #241414; }
         .tarjeta-mensaje.alta { border-left: 4px solid var(--verde-exito); background: #142414; }
+        .tarjeta-mensaje.censura { border-left: 4px solid var(--naranja-alerta); background: #241c14; }
         .mensaje-texto { font-style: italic; color: #eee; margin-bottom: 4px; }
-        .mensaje-autor { font-size: 0.8em; color: #888; text-align: right; }
+        .mensaje-author { font-size: 0.8em; color: #888; text-align: right; }
 
         .pie-pagina { margin-top: 30px; font-size: 0.75em; color: #444; letter-spacing: 0.5px; }
     </style>
@@ -95,10 +99,12 @@
         "Barcelona, això és TEU! Món, eso es TUYO!"
     </div>
 
+    <!-- IDENTIFICACIÓN DEL TURNO ACTUAL -->
     <div style="font-size: 0.85em; color: #aaa; margin-bottom: 10px; background: #161616; padding: 8px; border-radius: 10px;">
         👤 Operando: <b>Vicente (IMET-5800)</b> | 🛡️ Rol: <b>Enlace de Parada</b>
     </div>
 
+    <!-- DOUBLE BILLETERA DIGITAL -->
     <div class="billeteras-grid">
         <div class="hucha-box privada">
             <div class="hucha-titulo">💰 BOLSILLO PRIVADO</div>
@@ -112,10 +118,12 @@
         </div>
     </div>
 
+    <!-- BOTÓN DE EMERGENCIA SOS MÁXIMA -->
     <div class="zona-sos">
         <button class="btn-accion btn-sos" onclick="dispararAlertaSOS()">⚠️ PULSAR SOS EN CARRETERA</button>
     </div>
 
+    <!-- VENTANILLA 1: PROTOCOLO DE INGRESO (CICLO DE APERTURA) -->
     <div class="zona-interactiva" style="border-color: var(--azul-protocolo);">
         <h2 style="color: var(--azul-protocolo);">📝 Registro de Nuevos Nodos (Ciclo de Apertura)</h2>
         <div id="bloque-registro-nuevo">
@@ -139,6 +147,21 @@
         </div>
     </div>
 
+    <!-- ¡NUEVA! VENTANILLA 2: PROTOCOLO DE DEFENSA (VOTO CENSURA COMUNITARIO) -->
+    <div class="zona-interactiva" style="border-color: var(--naranja-alerta);">
+        <h2 style="color: var(--naranja-alerta);">🗳️ Defensa de la Parada (Voto de Censura)</h2>
+        <div class="campo">
+            <label for="carnet-infractor">Carnet IMET bajo sospecha o mala praxis:</label>
+            <input type="text" id="carnet-infractor" value="IMET-9999" placeholder="Ej: IMET-9999">
+        </div>
+        <div class="campo">
+            <label for="votante-parada">Tu Carnet emisor del voto:</label>
+            <input type="text" id="votante-parada" value="IMET-5800" placeholder="Tu carnet activo">
+        </div>
+        <button class="btn-accion btn-naranja" onclick="ejecutarVotoCensura()">Emitir Voto de Censura</button>
+    </div>
+
+    <!-- VENTANILLA 3: GASTOS TALLER -->
     <div class="zona-interactiva">
         <h2>🛠️ Ventanilla de Gasto (Consenso Presencial)</h2>
         <div class="campo">
@@ -158,6 +181,7 @@
         <button class="btn-accion btn-amarillo" onclick="procesarGastoTaller()">🚕 Autorizar Pago</button>
     </div>
 
+    <!-- VENTANILLA 4: SIEMBRA SOCIAL -->
     <div class="zona-interactiva" style="border-color: var(--oro-honor);">
         <h2 style="color: var(--oro-honor);">🌱 Sembrar Pensamiento Útil</h2>
         <div class="campo">
@@ -171,10 +195,12 @@
         <button class="btn-accion btn-oro" onclick="procesarSiembraSocial()">🌾 Sembrar en la Comunidad</button>
     </div>
 
+    <!-- CONSOLA DE ESTADO -->
     <div id="consola" class="consola-status">
-        [Sistema] Red de Honor IMET activa. Ciclo de apertura configurado esperando órdenes...
+        [Sistema] Red de Honor IMET activa. Todos los escudos de defensa cargados en memoria...
     </div>
 
+    <!-- TABLÓN DIGITAL -->
     <div class="historial-seccion">
         <div class="historial-titulo">📱 TABLÓN DIGITAL DE LA PARADA (AMB)</div>
         <div id="tablon-comun"></div>
@@ -189,8 +215,12 @@
     let tokensPrivados = 1000.0;
     let aportacionSocial = 0.0;
 
-    // Datos simulados de la solicitud actual
+    // Base de datos de simulación local para imitar a Rust
     let solicitudActiva = null;
+    let censoVotosCensura = {
+        "IMET-9999": 0
+    };
+    let nodosBloqueados = {};
 
     const consola = document.getElementById('consola');
     const pPrivada = document.getElementById('pantalla-privada');
@@ -198,7 +228,65 @@
     const tablonComun = document.getElementById('tablon-comun');
     const bloqueAvales = document.getElementById('bloque-avales');
 
-    // 1. SOLICITAR INGRESO NUEVO COMPAÑERO
+    // 1. PROTOCOLO DE VOTO DE CENSURA (LO NUEVO)
+    function ejecutarVotoCensura() {
+        const infractor = document.getElementById('carnet-infractor').value.trim();
+        const votante = document.getElementById('votante-parada').value.trim();
+
+        if (infractor === "" || votante === "") {
+            escribirConsola("🔴 ERROR: Rellena los datos de la votación.", "#ff6b6b");
+            return;
+        }
+
+        if (infractor === votante) {
+            escribirConsola("🔴 RECHAZADO: Un nodo no puede votar en su propia contra.", "#ff6b6b");
+            return;
+        }
+
+        if (nodosBloqueados[infractor]) {
+            escribirConsola(`ℹ️ El nodo [${infractor}] ya ha sido suspendido y congelado anteriormente.`, "#e67e22");
+            return;
+        }
+
+        // Inicializar el contador si el carnet es nuevo en la lista negra
+        if (!censoVotosCensura[infractor]) {
+            censoVotosCensura[infractor] = 0;
+        }
+
+        // Sumamos un voto
+        censoVotosCensura[infractor] += 1;
+        let votosActuales = censoVotosCensura[infractor];
+
+        const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        // COMPROBAMOS SI SE LOGRA EL QUÓRUM DE 3 VOTOS
+        if (votosActuales >= 3) {
+            nodosBloqueados[infractor] = true;
+            escribirConsola(`🚨 SENTENCIA COMUNITARIA: El carnet [${infractor}] alcanzó los 3 votos. ¡BLOQUEADO!`, "#ff4444");
+            
+            // Lanzar aviso rojo en el Tablón de la Parada
+            const tarjeta = document.createElement('div');
+            tarjeta.className = 'tarjeta-mensaje sos';
+            tarjeta.innerHTML = `
+                <div class="mensaje-texto" style="color: #ff8b8b; font-weight: bold;">🚨 "ATENCIÓN PARADA: El nodo ${infractor} ha violado las normas de la comunidad. Expulsado de la red por decisión democrática."</div>
+                <div class="mensaje-author">🔴 EXPULSIÓN RED • <b>Quórum Logrado (3/3)</b> a las ${fechaActual}</div>
+            `;
+            tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
+        } else {
+            escribirConsola(`🗳️ Voto registrado con éxito. El carnet [${infractor}] acumula ${votosActuales}/3 votos de censura.`, "#e67e22");
+            
+            // Aviso preventivo en el tablón
+            const tarjeta = document.createElement('div');
+            tarjeta.className = 'tarjeta-mensaje censura';
+            tarjeta.innerHTML = `
+                <div class="mensaje-texto">"Denuncia interpuesta contra el conductor del carnet ${infractor}. Vigilancia activada."</div>
+                <div class="mensaje-author">🗳️ VOTO EMITIDO • Por <b>${votante}</b> a las ${fechaActual} (${votosActuales}/3)</div>
+            `;
+            tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
+        }
+    }
+
+    // 2. SOLICITAR INGRESO NUEVO COMPAÑERO
     function solicitarIngreso() {
         const carnet = document.getElementById('nuevo-carnet').value.trim();
         const licencia = document.getElementById('nueva-licencia').value.trim();
@@ -208,21 +296,12 @@
             return;
         }
 
-        solicitudActiva = {
-            carnet: carnet,
-            licencia: licencia,
-            vicente: false,
-            jefe: false
-        };
-
+        solicitudActiva = { carnet: carnet, licencia: licencia, vicente: false, jefe: false };
         escribirConsola(`📝 PROTOCOLO: Solicitud registrada para ${carnet}. Esperando firmas del Ciclo de Apertura...`, "#3498db");
-        
-        // Mostrar los botones para que tú y tu jefe podáis firmar en la parada
         bloqueAvales.style.display = "block";
         resetearBotonesAval();
     }
 
-    // 2. FIRMAR EL AVAL (SIMULACIÓN DEL COMPORTAMIENTO DE RUST)
     function firmarAval(quien) {
         if(!solicitudActiva) return;
 
@@ -238,12 +317,10 @@
             escribirConsola(`🛡️ El Jefe-Guardián validó credenciales IMET para ${solicitudActiva.carnet}.`, "#f1c40f");
         }
 
-        // COMPROBACIÓN DEL CICLO COMPLETO
         if (solicitudActiva.vicente && solicitudActiva.jefe) {
             setTimeout(() => {
                 escribirConsola(`🟢 ¡CICLO DE APERTURA COMPLETADO! Nodo [${solicitudActiva.carnet}] dado de alta oficial.`, "#6bff6b");
                 
-                // Añadir aviso de alta exitosa en el tablón
                 const tarjeta = document.createElement('div');
                 tarjeta.className = 'tarjeta-mensaje alta';
                 const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -253,7 +330,6 @@
                 `;
                 tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
                 
-                // Ocultar bloque de avales y limpiar inputs
                 bloqueAvales.style.display = "none";
                 document.getElementById('nuevo-carnet').value = "";
                 document.getElementById('nueva-licencia').value = "";
@@ -269,7 +345,6 @@
         document.getElementById('btn-aval-jefe').innerText = "🛡️ Firmar Jefe";
     }
 
-    // Funciones del Taller, SOS y Siembra (Mantienen la lógica robusta de antes)
     function dispararAlertaSOS() {
         const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         escribirConsola(`🚨 !!! SOS MULTIDIFUSIÓN !!! Conductor [IMET-5800] solicita auxilio.`, "#ff4444");
@@ -277,7 +352,7 @@
         tarjeta.className = 'tarjeta-mensaje sos';
         tarjeta.innerHTML = `
             <div class="mensaje-texto" style="color: #ff8b8b; font-weight: bold;">⚠️ "¡Alerta en carretera! Necesito compañeros cerca de mi posición."</div>
-            <div class="mensaje-autor" style="color: #ffaaaa;">🚨 Emergencia • <b>Vicente (AMB-1234)</b> a las ${fechaActual}</div>
+            <div class="mensaje-author" style="color: #ffaaaa;">🚨 Emergencia • <b>Vicente (AMB-1234)</b> a las ${fechaActual}</div>
         `;
         tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
     }
@@ -315,7 +390,7 @@
             const fechaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             tarjeta.innerHTML = `
                 <div class="mensaje-texto">"${mensaje}"</div>
-                <div class="mensaje-autor">ℹ️ Pensamiento • <b>Vicente (IMET-5800)</b> a las ${fechaActual}</div>
+                <div class="mensaje-author">ℹ️ Pensamiento • <b>Vicente (IMET-5800)</b> a las ${fechaActual}</div>
             `;
             tablonComun.insertBefore(tarjeta, tablonComun.firstChild);
         } else {
