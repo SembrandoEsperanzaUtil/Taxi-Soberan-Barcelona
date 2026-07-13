@@ -1,10 +1,12 @@
 [package]
-name = "taxi-soberano-barcelona"
+[package]
+name = "taxi-soberan-barcelona"
 version = "1.0.0"
 authors = ["Vicente <SembrandoEsperanzaUtil>"]
 edition = "2021"
+
 [lib]
-name = "taxi_soberano_barcelona"
+name = "taxi_soberan_barcelona"
 crate-type = ["cdylib", "rlib"]
 description = "Infraestructura de soberanía digital para el taxi autónomo de Barcelona. Basado en el honor y la protección mutua."
 
