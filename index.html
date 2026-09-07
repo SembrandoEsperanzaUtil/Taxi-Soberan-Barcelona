@@ -426,6 +426,46 @@
         pSocial.innerText = aportacionSocial.toFixed(2);
     }
 </script>
+<!-- PANEL DE CONTROL - RED DE HONOR -->
+<div style="margin: 30px auto; max-width: 500px; text-align: center; background: #1a1a1a; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <h3 style="color: #fbc02d; margin-top: 0; font-family: sans-serif;">🚖 Panel Operativo AMB</h3>
+  <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
+    <button id="btn-sos" style="background-color: #d32f2f; color: white; padding: 12px 20px; font-size: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+      🚨 ALERTA SOS
+    </button>
+    <button id="btn-parada" style="background-color: #fbc02d; color: black; padding: 12px 20px; font-size: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+      📢 AVISO PARADA
+    </button>
+  </div>
+  <div id="consola-estado" style="background: #111; color: #4caf50; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 13px; min-height: 24px; text-align: left; border: 1px solid #333;">
+    Esperando interacción...
+  </div>
+</div>
 
+<script type="module">
+  import init, { emitir_aviso } from './pkg/taxi_soberan_barcelona.js';
+
+  async function iniciarApp() {
+    // 1. Inicializa el binario WebAssembly en memoria
+    await init();
+    const consola = document.getElementById('consola-estado');
+    consola.innerText = '⚡ Motor Rust conectado y listo.';
+
+    // 2. Conexión del botón SOS
+    document.getElementById('btn-sos').addEventListener('click', () => {
+      const respuesta = emitir_aviso('SOS Emergencia', 'Plaça Catalunya / Gran Via');
+      consola.innerText = respuesta;
+    });
+
+    // 3. Conexión del botón Aviso Parada
+    document.getElementById('btn-parada').addEventListener('click', () => {
+      const respuesta = emitir_aviso('Alta Demanda', 'Estació de Sants');
+      consola.innerText = respuesta;
+    });
+  }
+
+  iniciarApp();
+</script>
 </body>
 </html>
+
