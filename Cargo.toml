@@ -10,4 +10,6 @@ crate-type = ["cdylib", "rlib"]
 description = "Infraestructura de soberanía digital para el taxi autónomo de Barcelona. Basado en el honor y la protección mutua."
 
 [dependencies]
-# Aquí es donde en el futuro conectaremos la seguridad biométrica real
+wasm-bindgen = "0.2"
+# Aquí es donde en el futuro conectaremos la seguridad biométrica real.
+
