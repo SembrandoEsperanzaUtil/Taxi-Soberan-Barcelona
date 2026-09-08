@@ -467,7 +467,7 @@
     </div>
   </div>
 
-  <script type="module">
+ <script type="module">
     import init, { registrar_aviso } from './pkg/taxi_soberan_barcelona.js';
 
     async function run() {
@@ -481,7 +481,6 @@
         const ubicacion = selectUbicacion.value;
         const tipo = selectTipo.value;
         
-        // Llamada a la función Rust WebAssembly
         const respuesta = registrar_aviso(tipo, ubicacion);
         consola.innerText = respuesta;
       });
@@ -490,4 +489,4 @@
     run();
   </script>
 </body>
-</html>
+</html> 
