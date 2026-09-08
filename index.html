@@ -427,45 +427,67 @@
     }
 </script>
 <!-- PANEL DE CONTROL - RED DE HONOR -->
-<div style="margin: 30px auto; max-width: 500px; text-align: center; background: #1a1a1a; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-  <h3 style="color: #fbc02d; margin-top: 0; font-family: sans-serif;">🚖 Panel Operativo AMB</h3>
-  <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
-    <button id="btn-sos" style="background-color: #d32f2f; color: white; padding: 12px 20px; font-size: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-      🚨 ALERTA SOS
+  <div style="background: #1e293b; padding: 22px; border-radius: 12px; max-width: 540px; margin: 25px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.4); color: #f8fafc; font-family: sans-serif;">
+    <h3 style="margin-top: 0; color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 10px;">📡 Panel Operativo AMB - Red de Honor</h3>
+
+    <div style="margin-bottom: 14px;">
+      <label style="display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; font-weight: bold;">PUNTO NEURÁLGICO / ZONA:</label>
+      <select id="select-ubicacion" style="width: 100%; padding: 10px; border-radius: 6px; background: #0f172a; color: #fff; border: 1px solid #475569; font-size: 14px;">
+        <option value="Aeroport Josep Tarradellas - T1">✈️ Aeroport Josep Tarradellas - T1</option>
+        <option value="Aeroport Josep Tarradellas - T2">✈️ Aeroport Josep Tarradellas - T2</option>
+        <option value="Estació de Sants">🚆 Estació de Sants</option>
+        <option value="Estació de França">🚆 Estació de França</option>
+        <option value="Estació del Nord">🚌 Estació del Nord</option>
+        <option value="Port - Moll Adossat (Creuers)">🚢 Port - Moll Adossat (Creuers)</option>
+        <option value="Fira Gran Via (L'Hospitalet)">🏢 Fira Gran Via</option>
+        <option value="CCIB - Pl. de Llevant (Fòrum)">🏛️ CCIB - Pl. de Llevant (Fòrum)</option>
+        <option value="Montjuïc - Esdeveniments Musicals">🎵 Montjuïc - Esdeveniments Musicals</option>
+        <option value="Spotify Camp Nou / Zona Universitària">⚽ Spotify Camp Nou / Zona Univ.</option>
+        <option value="Plaza Catalunya / Passeig de Gràcia">📍 Pl. Catalunya / Pg. de Gràcia</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <label style="display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; font-weight: bold;">TIPO DE ESTADO / REPORTE:</label>
+      <select id="select-tipo" style="width: 100%; padding: 10px; border-radius: 6px; background: #0f172a; color: #fff; border: 1px solid #475569; font-size: 14px;">
+        <option value="Alta Demanda">🟡 Alta Demanda (Parrilla buida / Passatge)</option>
+        <option value="Via Colapsada">⛔ Vía Colapsada / Tall de trànsit</option>
+        <option value="Control Policial">👮 Control Policial / Inspecció</option>
+        <option value="SOS Emergencia">🚨 SOS Emergència Prioritària</option>
+      </select>
+    </div>
+
+    <button id="btn-transmitir" style="width: 100%; padding: 12px; background: #0284c7; color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 15px;">
+      📡 Transmitir Aviso a la Red
     </button>
-    <button id="btn-parada" style="background-color: #fbc02d; color: black; padding: 12px 20px; font-size: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-      📢 AVISO PARADA
-    </button>
+
+    <!-- Consola de salida -->
+    <div id="consola" style="margin-top: 18px; padding: 12px; background: #000; border-radius: 6px; font-family: monospace; font-size: 13px; color: #4ade80; min-height: 48px; border: 1px solid #334155;">
+      ⚡ Motor Rust conectado y listo.
+    </div>
   </div>
-  <div id="consola-estado" style="background: #111; color: #4caf50; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 13px; min-height: 24px; text-align: left; border: 1px solid #333;">
-    Esperando interacción...
-  </div>
-</div>
 
-<script type="module">
-  import init, { emitir_aviso } from './pkg/taxi_soberan_barcelona.js';
+  <script type="module">
+    import init, { registrar_aviso } from './pkg/taxi_soberan_barcelona.js';
 
-  async function iniciarApp() {
-    // 1. Inicializa el binario WebAssembly en memoria
-    await init();
-    const consola = document.getElementById('consola-estado');
-    consola.innerText = '⚡ Motor Rust conectado y listo.';
+    async function run() {
+      await init();
+      const consola = document.getElementById('consola');
+      const btnTransmitir = document.getElementById('btn-transmitir');
+      const selectUbicacion = document.getElementById('select-ubicacion');
+      const selectTipo = document.getElementById('select-tipo');
 
-    // 2. Conexión del botón SOS
-    document.getElementById('btn-sos').addEventListener('click', () => {
-      const respuesta = emitir_aviso('SOS Emergencia', 'Plaça Catalunya / Gran Via');
-      consola.innerText = respuesta;
-    });
+      btnTransmitir.addEventListener('click', () => {
+        const ubicacion = selectUbicacion.value;
+        const tipo = selectTipo.value;
+        
+        // Llamada a la función Rust WebAssembly
+        const respuesta = registrar_aviso(tipo, ubicacion);
+        consola.innerText = respuesta;
+      });
+    }
 
-    // 3. Conexión del botón Aviso Parada
-    document.getElementById('btn-parada').addEventListener('click', () => {
-      const respuesta = emitir_aviso('Alta Demanda', 'Estació de Sants');
-      consola.innerText = respuesta;
-    });
-  }
-
-  iniciarApp();
-</script>
+    run();
+  </script>
 </body>
 </html>
-
