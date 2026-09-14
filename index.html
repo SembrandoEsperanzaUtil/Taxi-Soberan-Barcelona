@@ -466,27 +466,39 @@
       ⚡ Motor Rust conectado y listo.
     </div>
   </div>
-
- <script type="module">
+<script type="module">
     import init, { registrar_aviso } from './pkg/taxi_soberan_barcelona.js';
 
     async function run() {
+      // 1. Inicializar el motor WebAssembly
       await init();
+
       const consola = document.getElementById('consola');
       const btnTransmitir = document.getElementById('btn-transmitir');
       const selectUbicacion = document.getElementById('select-ubicacion');
       const selectTipo = document.getElementById('select-tipo');
 
-      btnTransmitir.addEventListener('click', () => {
-        const ubicacion = selectUbicacion.value;
-        const tipo = selectTipo.value;
-        
-        const respuesta = registrar_aviso(tipo, ubicacion);
-        consola.innerText = respuesta;
-      });
+      if (consola) {
+        consola.innerText = "⚡ Motor Rust conectado y listo para transmitir.";
+      }
+
+      // 2. Conectar el clic del botón
+      if (btnTransmitir) {
+        btnTransmitir.addEventListener('click', () => {
+          const ubicacion = selectUbicacion ? selectUbicacion.value : "Zona no definida";
+          const tipo = selectTipo ? selectTipo.value : "General";
+          
+          // Llamada a la función compilada en Rust
+          const respuesta = registrar_aviso(tipo, ubicacion);
+          
+          if (consola) {
+            consola.innerText = respuesta;
+          }
+        });
+      }
     }
 
     run();
-  </script>
+</script>
 </body>
 </html> 
