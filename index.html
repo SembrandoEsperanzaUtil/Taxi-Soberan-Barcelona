@@ -467,10 +467,9 @@
     </div>
   </div>
 <script type="module">
-    import init, { registrar_aviso } from './pkg/taxi_soberan_barcelona.js';
+    import init, { emitir_aviso } from './pkg/taxi_soberan_barcelona.js';
 
     async function run() {
-      // 1. Inicializar el motor WebAssembly
       await init();
 
       const consola = document.getElementById('consola');
@@ -482,14 +481,13 @@
         consola.innerText = "⚡ Motor Rust conectado y listo para transmitir.";
       }
 
-      // 2. Conectar el clic del botón
       if (btnTransmitir) {
         btnTransmitir.addEventListener('click', () => {
           const ubicacion = selectUbicacion ? selectUbicacion.value : "Zona no definida";
           const tipo = selectTipo ? selectTipo.value : "General";
           
-          // Llamada a la función compilada en Rust
-          const respuesta = registrar_aviso(tipo, ubicacion);
+          // Llamada con el nombre exacto de tu función en Rust:
+          const respuesta = emitir_aviso(tipo, ubicacion);
           
           if (consola) {
             consola.innerText = respuesta;
@@ -499,6 +497,6 @@
     }
 
     run();
-</script>
+  </script>
 </body>
 </html> 
