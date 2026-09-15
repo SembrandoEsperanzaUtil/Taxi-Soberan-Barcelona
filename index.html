@@ -3,74 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Red de Honor - AMB | Taxi Soberano</title>
+  <title>Taxi Soberano Barcelona - Red de Honor</title>
   <style>
     :root {
       --bg-color: #0d1117;
       --card-bg: #161b22;
       --border-color: #30363d;
-      --accent-blue: #38bdf8; /* Azul cielo */
+      --accent-blue: #38bdf8;
       --accent-hover: #0ea5e9;
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
       --terminal-bg: #000000;
       --terminal-green: #3fb950;
+      --gold: #f59e0b;
+      --purple: #a855f7;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 16px;
     }
 
-    .panel-container {
+    /* Contenedor principal estilo móvil/tablet */
+    .app-container {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
+      border-radius: 16px;
       width: 100%;
-      max-width: 520px;
-      padding: 24px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      max-width: 480px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
     }
 
-    .header {
+    /* Cabecera común */
+    .app-header {
+      padding: 16px;
       text-align: center;
-      margin-bottom: 24px;
+      background-color: #12161f;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 16px;
     }
 
-    .header h1 {
-      font-size: 1.4rem;
+    .app-header h1 {
+      font-size: 1.25rem;
       color: var(--accent-blue);
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
 
-    .header p {
-      font-size: 0.85rem;
+    .app-header p {
+      font-size: 0.8rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
+    /* Barra de Navegación por pestañas */
+    .nav-bar {
+      display: flex;
+      background-color: #161b22;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-btn {
+      flex: 1;
+      padding: 12px 6px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn .icon {
+      font-size: 1.2rem;
+    }
+
+    .nav-btn.active {
+      color: var(--accent-blue);
+      background-color: rgba(56, 189, 248, 0.08);
+      border-bottom: 2px solid var(--accent-blue);
+    }
+
+    /* Contenido de cada pestaña */
+    .tab-content {
+      padding: 20px;
+      display: none; /* Por defecto ocultas */
+    }
+
+    .tab-content.active {
+      display: block; /* Solo la pestaña activa es visible */
+    }
+
+    /* Estilos de formulario (Cabina) */
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       color: var(--text-muted);
       margin-bottom: 8px;
@@ -87,18 +137,11 @@
       color: var(--text-main);
       font-size: 0.95rem;
       outline: none;
-      transition: border-color 0.2s;
     }
 
-    select:focus {
-      border-color: var(--accent-blue);
-    }
-
-    .btn-transmitir {
+    .btn-action {
       width: 100%;
       padding: 14px;
-      background-color: var(--accent-blue);
-      color: #041019;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
@@ -108,85 +151,235 @@
       justify-content: center;
       align-items: center;
       gap: 8px;
-      transition: background-color 0.2s, transform 0.1s;
       margin-top: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+      transition: opacity 0.2s;
     }
 
-    .btn-transmitir:hover {
-      background-color: var(--accent-hover);
+    .btn-action:active {
+      opacity: 0.85;
     }
 
-    .btn-transmitir:active {
-      transform: scale(0.98);
+    .btn-blue {
+      background-color: var(--accent-blue);
+      color: #041019;
     }
 
+    /* Terminal de mensajes */
     .consola-wrapper {
       background-color: var(--terminal-bg);
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 14px;
-      min-height: 75px;
+      padding: 12px;
+      min-height: 70px;
       display: flex;
       align-items: center;
     }
 
     .consola-texto {
       font-family: "Courier New", Courier, monospace;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: var(--terminal-green);
       line-height: 1.4;
       word-break: break-word;
+    }
+
+    /* Tarjetas para los nuevos módulos */
+    .card-placeholder {
+      background-color: #21262d;
+      border: 1px dashed var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .card-placeholder h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .card-placeholder p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .metric-box {
+      display: flex;
+      justify-content: space-around;
+      margin: 16px 0;
+    }
+
+    .metric {
+      background-color: #161b22;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      flex: 1;
+      margin: 0 4px;
+      text-align: center;
+    }
+
+    .metric .val {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
 
-  <div class="panel-container">
-    <div class="header">
-      <h1>Red de Honor - AMB</h1>
-      <p>Operativa Taxi Soberano Barcelona</p>
+  <div class="app-container">
+    
+    <!-- Cabecera permanente -->
+    <div class="app-header">
+      <h1>Taxi Soberano - AMB</h1>
+      <p>Red Comunitaria del Taxi de Barcelona</p>
     </div>
 
-    <!-- Selector de Punto Neurálgico -->
-    <div class="form-group">
-      <label for="select-ubicacion">Punto Neurálgico / Zona</label>
-      <select id="select-ubicacion">
-        <option value="Port - Moll Adossat (Creuers)">🚢 Port - Moll Adossat (Creuers)</option>
-        <option value="Aeroport T1 (Sortides/Arribades)">✈️ Aeroport T1 (Sortides/Arribades)</option>
-        <option value="Aeroport T2">✈️ Aeroport T2</option>
-        <option value="Estació de Sants">🚆 Estació de Sants</option>
-        <option value="Estació del Nord">🚌 Estació del Nord</option>
-        <option value="Plaça Catalunya / Centre">📍 Plaça Catalunya / Centre</option>
-        <option value="Fira Gran Via (Hospitalet)">🏢 Fira Gran Via (Hospitalet)</option>
-        <option value="Passeig Marítim / Ciutadella">🌊 Passeig Marítim / Ciutadella</option>
-      </select>
-    </div>
+    <!-- Barra de 4 Módulos -->
+    <nav class="nav-bar">
+      <button class="nav-btn active" onclick="cambiarModulo('modulo-cabina', this)">
+        <span class="icon">🚖</span>
+        <span>Cabina</span>
+      </button>
+      <button class="nav-btn" onclick="cambiarModulo('modulo-teu', this)">
+        <span class="icon">🪙</span>
+        <span>Token TEU</span>
+      </button>
+      <button class="nav-btn" onclick="cambiarModulo('modulo-social', this)">
+        <span class="icon">🤝</span>
+        <span>Social</span>
+      </button>
+      <button class="nav-btn" onclick="cambiarModulo('modulo-ajustes', this)">
+        <span class="icon">⚙️</span>
+        <span>Ajustes</span>
+      </button>
+    </nav>
 
-    <!-- Selector de Tipo de Reporte -->
-    <div class="form-group">
-      <label for="select-tipo">Tipo de Estado / Reporte</label>
-      <select id="select-tipo">
-        <option value="🟡 Alta Demanda">🟡 Alta Demanda</option>
-        <option value="🟢 Zona Despejada / Fluida">🟢 Zona Despejada / Fluida</option>
-        <option value="⛔ Vía Colapsada / Retención">⛔ Vía Colapsada / Retención</option>
-        <option value="🚔 Control / Tráfico Denso">🚔 Control / Tráfico Denso</option>
-        <option value="🔴 ALERTA AMB / SOS">🔴 ALERTA AMB / SOS</option>
-      </select>
-    </div>
+    <!-- MÓDULO 1: CABINA (Operativa en tiempo real) -->
+    <section id="modulo-cabina" class="tab-content active">
+      <div class="form-group">
+        <label for="select-ubicacion">Punto Neurálgico / Zona</label>
+        <select id="select-ubicacion">
+          <option value="Port - Moll Adossat (Creuers)">🚢 Port - Moll Adossat (Creuers)</option>
+          <option value="Aeroport T1 (Sortides/Arribades)">✈️ Aeroport T1 (Sortides/Arribades)</option>
+          <option value="Aeroport T2">✈️ Aeroport T2</option>
+          <option value="Estació de Sants">🚆 Estació de Sants</option>
+          <option value="Estació del Nord">🚌 Estació del Nord</option>
+          <option value="Plaça Catalunya / Centre">📍 Plaça Catalunya / Centre</option>
+          <option value="Fira Gran Via (Hospitalet)">🏢 Fira Gran Via (Hospitalet)</option>
+          <option value="Passeig Marítim / Ciutadella">🌊 Passeig Marítim / Ciutadella</option>
+        </select>
+      </div>
 
-    <!-- Botón Transmitir -->
-    <button id="btn-transmitir" class="btn-transmitir">
-      📡 Transmitir Aviso a la Red
-    </button>
+      <div class="form-group">
+        <label for="select-tipo">Tipo de Estado / Reporte</label>
+        <select id="select-tipo">
+          <option value="🟡 Alta Demanda">🟡 Alta Demanda</option>
+          <option value="🟢 Zona Despejada / Fluida">🟢 Zona Despejada / Fluida</option>
+          <option value="⛔ Vía Colapsada / Retención">⛔ Vía Colapsada / Retención</option>
+          <option value="🚔 Control / Tráfico Denso">🚔 Control / Tráfico Denso</option>
+          <option value="🔴 ALERTA AMB / SOS">🔴 ALERTA AMB / SOS</option>
+        </select>
+      </div>
 
-    <!-- Única Consola en Pantalla -->
-    <div class="consola-wrapper">
-      <div id="consola" class="consola-texto">⚡ Conectando con motor WebAssembly...</div>
-    </div>
+      <button id="btn-transmitir" class="btn-action btn-blue">
+        📡 Transmitir Aviso a la Red
+      </button>
+
+      <div class="consola-wrapper">
+        <div id="consola" class="consola-texto">⚡ Conectando con motor WebAssembly...</div>
+      </div>
+    </section>
+
+    <!-- MÓDULO 2: TOKEN TEU (Soberanía y balance cooperativo) -->
+    <section id="modulo-teu" class="tab-content">
+      <div class="card-placeholder">
+        <h3 style="color: var(--gold);">Billetera Soberana TEU</h3>
+        <p>Unidad de valor cooperativo generada por horas de servicio y solidaridad en la red.</p>
+      </div>
+
+      <div class="metric-box">
+        <div class="metric">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Saldo TEU</span>
+          <div class="val" style="color: var(--gold);">0.00 Ⓣ</div>
+        </div>
+        <div class="metric">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Horas Guardia</span>
+          <div class="val">0 h</div>
+        </div>
+      </div>
+
+      <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+        (En el siguiente paso conectaremos la función Rust para emitir y registrar TEU).
+      </p>
+    </section>
+
+    <!-- MÓDULO 3: IMPACTO SOCIAL (Sembrar en centros y comunidad) -->
+    <section id="modulo-social" class="tab-content">
+      <div class="card-placeholder">
+        <h3 style="color: var(--purple);">Impacto Social y Solidario</h3>
+        <p>Fondo colectivo derivado de la actividad del taxi para apoyar a comedores y centros de barrio en Barcelona.</p>
+      </div>
+
+      <div class="metric-box">
+        <div class="metric">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Aporte Sembrado</span>
+          <div class="val" style="color: var(--purple);">0.0 %</div>
+        </div>
+        <div class="metric">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Centros Apoyados</span>
+          <div class="val">0</div>
+        </div>
+      </div>
+
+      <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+        (Aquí conectaremos la asignación y trazabilidad ética en Rust).
+      </p>
+    </section>
+
+    <!-- MÓDULO 4: AJUSTES Y CREDENCIALES -->
+    <section id="modulo-ajustes" class="tab-content">
+      <div class="card-placeholder">
+        <h3>Credenciales y Licencia</h3>
+        <p>Configuración local del conductor y parámetros de la flota AMB.</p>
+      </div>
+
+      <div class="form-group">
+        <label>Identificador de Conductor</label>
+        <input type="text" value="Conductor Soberano" style="width: 100%; padding: 10px; background: #21262d; border: 1px solid var(--border-color); border-radius: 8px; color: white;" readonly>
+      </div>
+      <div class="form-group">
+        <label>Área Operativa</label>
+        <input type="text" value="AMB - Barcelona Metropolitana" style="width: 100%; padding: 10px; background: #21262d; border: 1px solid var(--border-color); border-radius: 8px; color: white;" readonly>
+      </div>
+    </section>
+
   </div>
 
-  <!-- Lógica WebAssembly Rust -->
+  <!-- Navegación entre pestañas -->
+  <script>
+    function cambiarModulo(idModulo, boton) {
+      // 1. Ocultar todas las secciones
+      const secciones = document.querySelectorAll('.tab-content');
+      secciones.forEach(sec => sec.classList.remove('active'));
+
+      // 2. Desactivar todos los botones de la barra
+      const botones = document.querySelectorAll('.nav-btn');
+      botones.forEach(btn => btn.classList.remove('active'));
+
+      // 3. Activar la sección y el botón seleccionados
+      const seccionDestino = document.getElementById(idModulo);
+      if (seccionDestino) {
+        seccionDestino.classList.add('active');
+      }
+      boton.classList.add('active');
+    }
+  </script>
+
+  <!-- Lógica WebAssembly Rust (la que ya teníamos probada) -->
   <script type="module">
     import init, { emitir_aviso } from './pkg/taxi_soberan_barcelona.js';
 
@@ -203,13 +396,14 @@
         btnTransmitir.addEventListener('click', () => {
           const ubicacion = selectUbicacion.value;
           const tipo = selectTipo.value;
-          
-          // Ejecuta la función de Rust
           const respuesta = emitir_aviso(tipo, ubicacion);
           consola.innerText = respuesta;
         });
       } catch (err) {
-        document.getElementById('consola').innerText = "❌ Error al iniciar WebAssembly: " + err;
+        const consola = document.getElementById('consola');
+        if (consola) {
+          consola.innerText = "❌ Error al iniciar WebAssembly: " + err;
+        }
       }
     }
 
