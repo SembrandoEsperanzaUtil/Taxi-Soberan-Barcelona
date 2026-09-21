@@ -214,5 +214,3 @@ pub fn emitir_aviso(tipo: &str, ubicacion: &str) -> String {
         tipo, ubicacion
     )
 }
-
-
