@@ -379,14 +379,14 @@
     }
   </script>
 
-  <!-- Lógica WebAssembly Rust (la que ya teníamos probada) -->
+ <!-- Lógica WebAssembly Rust con diagnóstico visible -->
   <script type="module">
     import init, { emitir_aviso } from './pkg/taxi_soberan_barcelona.js';
 
     async function run() {
+      const consola = document.getElementById('consola');
       try {
         await init();
-        const consola = document.getElementById('consola');
         const btnTransmitir = document.getElementById('btn-transmitir');
         const selectUbicacion = document.getElementById('select-ubicacion');
         const selectTipo = document.getElementById('select-tipo');
@@ -400,14 +400,14 @@
           consola.innerText = respuesta;
         });
       } catch (err) {
-        const consola = document.getElementById('consola');
         if (consola) {
-          consola.innerText = "❌ Error al iniciar WebAssembly: " + err;
+          consola.innerText = "❌ Error al iniciar WebAssembly: " + err.message;
         }
+        console.error("Detalle del fallo:", err);
       }
     }
 
     run();
-  </script>
+  </script>  
 </body>
 </html>
