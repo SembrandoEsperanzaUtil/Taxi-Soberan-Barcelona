@@ -1,0 +1,18 @@
+{
+  "name": "taxi-soberan-barcelona",
+  "type": "module",
+  "collaborators": [
+    "Vicente <SembrandoEsperanzaUtil>"
+  ],
+  "version": "1.0.0",
+  "files": [
+    "taxi_soberan_barcelona_bg.wasm",
+    "taxi_soberan_barcelona.js",
+    "taxi_soberan_barcelona.d.ts"
+  ],
+  "main": "taxi_soberan_barcelona.js",
+  "types": "taxi_soberan_barcelona.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
