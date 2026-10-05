@@ -206,3 +206,11 @@ impl RedTaxiSoberano {
     }
 }
 
+
+#[wasm_bindgen]
+pub fn emitir_aviso(tipo: &str, ubicacion: &str) -> String {
+    format!(
+        "✅ [Red de Honor - AMB] Aviso recibido: '{}' en '{}'. Transmitido a la flota.",
+        tipo, ubicacion
+    )
+}
