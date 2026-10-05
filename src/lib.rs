@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 // PROYECTO: TAXI SOBERANO - BARCELONA AMB
 // "Barcelona, això és TEU! Món, això és TEU!"
 
@@ -207,10 +206,3 @@ impl RedTaxiSoberano {
     }
 }
 
-#[wasm_bindgen]
-pub fn emitir_aviso(tipo: &str, ubicacion: &str) -> String {
-    format!(
-        "✅ [Red de Honor - AMB] Aviso recibido: '{}' en '{}'. Transmitido a la flota.",
-        tipo, ubicacion
-    )
-}
